@@ -2,7 +2,7 @@
 
 Dự án phát triển ứng dụng web hỗ trợ quản lý toàn diện các hoạt động kinh doanh của cửa hàng điện thoại di động, được xây dựng và thiết kế bởi Vương Hoàng Tuấn Anh. Hệ thống giúp tối ưu hóa quy trình bán hàng, theo dõi đơn đặt hàng và quản lý danh sách sản phẩm một cách trực quan, hiệu quả.
 
-## 🚀 Công nghệ sử dụng
+##  Công nghệ sử dụng
 
 Qua cấu trúc dự án, hệ thống được xây dựng trên nền tảng .NET với các công nghệ cụ thể như sau:
 
@@ -21,7 +21,7 @@ Qua cấu trúc dự án, hệ thống được xây dựng trên nền tảng .
 * **Thư viện JavaScript:** jQuery 3.7.0
 * **View Engine:** Razor View
 
-## 🌟 Tính năng nổi bật
+## Tính năng nổi bật
 
 * **Quản lý Sản phẩm:** Thêm, sửa, xóa và cập nhật thông tin chi tiết các dòng điện thoại, thiết bị và phụ kiện.
 * **Quản lý Đơn hàng:** Lưu trữ và theo dõi trạng thái đơn hàng từ lúc đặt mua đến khi giao dịch thành công.
