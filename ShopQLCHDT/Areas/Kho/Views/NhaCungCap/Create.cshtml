@@ -1,0 +1,73 @@
+﻿@model ShopQLCHDT.Models.NHACUNGCAP
+
+@{
+    ViewBag.Title = "Thêm mới Nhà Cung Cấp";
+}
+
+<div class="section pt-5">
+    <div class="neon-container">
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h2 class="section-title text-gradient m-0">Thêm Đối Tác Mới</h2>
+                        <p class="text-secondary mt-1 mb-0 text-sm">Nhập thông tin nhà cung cấp hàng hóa.</p>
+                    </div>
+                    <a href="@Url.Action("Index")" class="btn-outline-neon btn-sm border-0 text-secondary">
+                        <i class="bi bi-arrow-left me-2"></i> Quay lại
+                    </a>
+                </div>
+
+                <div class="glass-card animate-slide-up p-5">
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "alert alert-neon alert-danger mb-4" })
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.TENNCC, "Tên Nhà Cung Cấp", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                            <div class="position-relative">
+                                <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                    <i class="bi bi-shop"></i>
+                                </span>
+                                @Html.EditorFor(model => model.TENNCC, new { htmlAttributes = new { @class = "form-control ps-5", placeholder = "VD: Samsung Vina, Apple Vietnam..." } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.TENNCC, "", new { @class = "text-danger text-xs mt-1" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.DIACHI, "Địa chỉ", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                            <div class="position-relative">
+                                <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                    <i class="bi bi-geo-alt"></i>
+                                </span>
+                                @Html.EditorFor(model => model.DIACHI, new { htmlAttributes = new { @class = "form-control ps-5", placeholder = "Nhập địa chỉ trụ sở..." } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.DIACHI, "", new { @class = "text-danger text-xs mt-1" })
+                        </div>
+
+                        <div class="form-group mb-5">
+                            @Html.LabelFor(model => model.DIENTHOAI, "Số điện thoại", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                            <div class="position-relative">
+                                <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                    <i class="bi bi-telephone"></i>
+                                </span>
+                                @Html.EditorFor(model => model.DIENTHOAI, new { htmlAttributes = new { @class = "form-control ps-5 font-monospace", placeholder = "0909..." } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.DIENTHOAI, "", new { @class = "text-danger text-xs mt-1" })
+                        </div>
+
+                        <button type="submit" class="btn-neon w-100 py-3 shadow-glow-cyan fs-6 text-uppercase fw-bold">
+                            <i class="bi bi-plus-circle me-2"></i> Tạo Nhà Cung Cấp
+                        </button>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

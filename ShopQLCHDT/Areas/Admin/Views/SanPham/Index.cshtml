@@ -1,0 +1,343 @@
+﻿@model IEnumerable<ShopQLCHDT.Models.SANPHAM>
+@{
+    ViewBag.Title = "Sản phẩm";
+    var products = Model.ToList();
+    var brands = ViewBag.Brands as IEnumerable<ShopQLCHDT.Models.THUONGHIEU> ?? new List<ShopQLCHDT.Models.THUONGHIEU>();
+    var selectedBrand = ViewBag.SelectedBrand as int?;
+    var keyword = ViewBag.Keyword as string ?? "";
+}
+
+<section style="padding: 2rem 0;">
+    <div class="neon-container">
+        <nav style="margin-bottom: 1.5rem;">
+            <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li><a href="@Url.Action("Index", "Home")" style="color: var(--text-muted); text-decoration: none;">Trang chủ</a></li>
+                <li style="color: var(--text-muted);">/</li>
+                <li style="color: var(--neon-cyan);">Sản phẩm</li>
+            </ol>
+        </nav>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 style="font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">
+                    Tất cả sản phẩm
+                </h1>
+                <p style="color: var(--text-secondary);">
+                    Hiển thị <span style="color: var(--neon-cyan); font-weight: 600;">@products.Count</span> sản phẩm
+                    @if (!string.IsNullOrEmpty(keyword))
+                    {
+                        <span>cho "<span style="color: var(--neon-cyan);">@keyword</span>"</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+    <div class="neon-container">
+        <div style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem;">
+            <aside>
+                <div class="glass-card" style="position: sticky; top: 100px;">
+                    <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="bi bi-funnel" style="color: var(--neon-cyan);"></i>
+                        Bộ lọc
+                    </h3>
+
+                    <form action="@Url.Action("Index", "Product")" method="get">
+                        <div class="form-group">
+                            <label class="form-label">Tìm kiếm</label>
+                            <div style="position: relative;">
+                                <input type="text" name="keyword" value="@keyword" class="form-control" placeholder="Nhập tên sản phẩm...">
+                                <i class="bi bi-search" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Thương hiệu</label>
+                            <select name="brand" class="form-control">
+                                <option value="">Tất cả thương hiệu</option>
+                                @foreach (var brand in brands)
+                                {
+                                    <option value="@brand.MATH" @(selectedBrand == brand.MATH ? "selected" : "")>@brand.TENTH</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Khoảng giá</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                <input type="number" name="minPrice" class="form-control" placeholder="Từ" value="@ViewBag.MinPrice">
+                                <input type="number" name="maxPrice" class="form-control" placeholder="Đến" value="@ViewBag.MaxPrice">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                            <button type="submit" class="btn-neon" style="flex: 1;">
+                                <i class="bi bi-search"></i>
+                                Lọc
+                            </button>
+                            <a href="@Url.Action("Index", "Product")" class="btn-outline-neon" style="padding: 0.75rem 1rem;">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
+                    </form>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <label class="form-label" style="margin-bottom: 1rem;">Thương hiệu phổ biến</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            @foreach (var brand in brands.Take(6))
+                            {
+                                <a href="@Url.Action("Index", "Product", new { brand = brand.MATH })"
+                                   class="@(selectedBrand == brand.MATH ? "badge-neon" : "")"
+                                   style="padding: 0.5rem 1rem; background: @(selectedBrand == brand.MATH ? "var(--gradient-neon)" : "rgba(255,255,255,0.05)"); border: 1px solid @(selectedBrand == brand.MATH ? "transparent" : "var(--color-border)"); border-radius: 9999px; font-size: 0.75rem; font-weight: 500; color: @(selectedBrand == brand.MATH ? "var(--color-void)" : "var(--text-secondary)"); text-decoration: none; transition: all 0.2s;">
+                                    @brand.TENTH
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <div>
+                <div class="glass-card" style="padding: 1rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="color: var(--text-muted); font-size: 0.875rem;">Sắp xếp:</span>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="@Url.Action("Index", "Product", new { keyword, brand = selectedBrand, sort = "newest" })"
+                               class="@(ViewBag.Sort == "newest" ? "btn-neon" : "btn-outline-neon")" style="padding: 0.5rem 1rem; font-size: 0.75rem;">
+                                Mới nhất
+                            </a>
+                            <a href="@Url.Action("Index", "Product", new { keyword, brand = selectedBrand, sort = "price_asc" })"
+                               class="@(ViewBag.Sort == "price_asc" ? "btn-neon" : "btn-outline-neon")" style="padding: 0.5rem 1rem; font-size: 0.75rem;">
+                                Giá thấp
+                            </a>
+                            <a href="@Url.Action("Index", "Product", new { keyword, brand = selectedBrand, sort = "price_desc" })"
+                               class="@(ViewBag.Sort == "price_desc" ? "btn-neon" : "btn-outline-neon")" style="padding: 0.5rem 1rem; font-size: 0.75rem;">
+                                Giá cao
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <button class="product-card-action-btn view-toggle active" data-view="grid" title="Grid view" style="width: 36px; height: 36px;">
+                            <i class="bi bi-grid-3x3-gap"></i>
+                        </button>
+                        <button class="product-card-action-btn view-toggle" data-view="list" title="List view" style="width: 36px; height: 36px;">
+                            <i class="bi bi-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
+
+                    <a href="@Url.Action("Create", "SanPham", new { area = "Admin" })" class="product-card animate-slide-up" style="text-decoration: none; border: 2px dashed rgba(255,255,255,0.2); background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; min-height: 400px;">
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: rgba(0, 245, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);">
+                                <i class="bi bi-plus-lg" style="font-size: 2.5rem; color: var(--neon-cyan);"></i>
+                            </div>
+                            <h3 class="product-card-title" style="margin-bottom: 0.5rem; color: var(--neon-cyan);">Thêm Sản Phẩm</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem;">Tạo mới sản phẩm vào kho</p>
+                        </div>
+                    </a>
+                    @if (products.Any())
+                    {
+                        int index = 0;
+                        foreach (var item in products)
+                        {
+                            index++;
+                            // THAY ĐỔI 1: Đổi thẻ <a> bao ngoài thành thẻ <div>
+                            <div class="product-card animate-slide-up" style="animation-delay: @(Math.Min(index, 8) * 0.05)s; position: relative;">
+
+                                <div class="product-card-image">
+                                    @if (index <= 3)
+                                    {
+                                        <div class="product-card-badges">
+                                            <span class="badge-neon badge-new">Hot</span>
+                                        </div>
+                                    }
+
+                                    <div class="product-card-actions" style="z-index: 10;">
+                                        <button class="product-card-action-btn" title="Xem chi tiết" onclick="quickView(@item.MASP);">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+
+                                        <a href="@Url.Action("Edit", "SanPham", new { area = "Admin", id = item.MASP })" class="product-card-action-btn" title="Sửa sản phẩm" style="color: var(--neon-yellow) !important;">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Delete", "SanPham", new { area = "Admin", id = item.MASP })" class="product-card-action-btn" title="Xóa sản phẩm" style="color: #ef4444 !important;">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+
+                                    <a href="@Url.Action("Details", "Product", new { id = item.MASP })" style="display: block; width: 100%; height: 100%;">
+                                        <img src="~/Content/Images/@item.HINHANH" alt="@item.TENSP">
+                                    </a>
+                                </div>
+
+                                <div class="product-card-body">
+                                    @if (item.THUONGHIEU != null)
+                                    {
+                                        <div class="product-card-brand">@item.THUONGHIEU.TENTH</div>
+                                    }
+
+                                    <h3 class="product-card-title">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.MASP })" style="text-decoration: none; color: inherit;">
+                                            @item.TENSP
+                                        </a>
+                                    </h3>
+
+                                    <div class="product-card-footer">
+                                        <div class="product-card-price">
+                                            <span class="price-current">@(item.GIABAN.HasValue ? item.GIABAN.Value.ToString("N0") : "N/A")</span>
+                                            <span class="price-currency">đ</span>
+                                        </div>
+                                        <button class="btn-neon" onclick="addToCart(@item.MASP);" style="padding: 8px 16px; font-size: 12px; position: relative; z-index: 5;">
+                                            <i class="bi bi-bag-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @if (!products.Any())
+                    {
+                        <div class="glass-card mt-4" style="text-align: center; padding: 4rem 2rem;">
+                            <p style="color: var(--text-secondary);">Danh sách trống, hãy thêm sản phẩm đầu tiên!</p>
+                        </div>
+                    }
+                </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        function addToCart(productId) {
+            fetch('@Url.Action("AddToCart", "Cart")/' + productId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) {
+                        badge.textContent = data.cartCount;
+                    } else {
+                        const cartBtn = document.querySelector('.navbar-action-btn[title="Giỏ hàng"]');
+                        if (cartBtn) {
+                            const newBadge = document.createElement('span');
+                            newBadge.className = 'cart-badge';
+                            newBadge.textContent = data.cartCount;
+                            cartBtn.appendChild(newBadge);
+                        }
+                    }
+                    showToast('Đã thêm vào giỏ hàng!', 'success');
+                } else {
+                    showToast(data.message || 'Có lỗi xảy ra', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Có lỗi xảy ra', 'error');
+            });
+        }
+
+        function quickView(productId) {
+            window.location.href = '@Url.Action("Details", "Product")/' + productId;
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
+                color: white;
+                border-radius: 12px;
+                font-weight: 500;
+                z-index: 9999;
+                animation: slideIn 0.3s ease-out;
+                backdrop-filter: blur(10px);
+            `;
+            toast.textContent = message;
+
+            if (!document.querySelector('#toast-styles')) {
+                const style = document.createElement('style');
+                style.id = 'toast-styles';
+                style.textContent = `
+                    @@keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @@keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // View toggle
+        document.querySelectorAll('.view-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-toggle').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const grid = document.getElementById('productsGrid');
+                if (this.dataset.view === 'list') {
+                    grid.style.gridTemplateColumns = '1fr';
+                } else {
+                    grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                }
+            });
+        });
+    </script>
+}
+
+@section styles {
+    <style>
+        .view-toggle.active {
+            background: var(--neon-cyan) !important;
+            border-color: var(--neon-cyan) !important;
+            color: var(--color-void) !important;
+        }
+
+        @@media (max-width: 1200px) {
+            .neon-container > div[style*="grid-template-columns: 280px"] {
+                grid-template-columns: 1fr !important;
+            }
+
+                .neon-container > div[style*="grid-template-columns: 280px"] > aside {
+                    display: none;
+                }
+        }
+
+        @@media (max-width: 900px) {
+            #productsGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @@media (max-width: 600px) {
+            #productsGrid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+}

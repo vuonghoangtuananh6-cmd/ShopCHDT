@@ -1,0 +1,65 @@
+﻿@model ShopQLCHDT.Models.ViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Tạo Khách hàng mới";
+    string newAccount = ViewBag.NewAccount ?? "";
+}
+
+<div class="section pt-5">
+    <div class="neon-container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="text-center mb-4">
+                    <h2 class="section-title text-gradient mb-3">Tạo Hồ Sơ Khách Hàng</h2>
+                    <p class="text-secondary">Khách hàng chưa tồn tại. Vui lòng tạo mới để tiếp tục thanh toán.</p>
+                </div>
+
+                <div class="glass-card animate-fade-in">
+                    @using (Html.BeginForm("TaoKhachHangMoi", "BanHang", FormMethod.Post))
+                    {
+                        if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-neon alert-danger mb-4">
+                                @Html.ValidationSummary(true, "", new { @class = "m-0" })
+                            </div>
+                        }
+
+                        <div class="form-group mb-4">
+                            <label class="form-label">Tên đăng nhập / Mã KH <span class="text-danger">*</span></label>
+                            <input name="TenDangNhap" class="form-control" value="@newAccount" placeholder="Nhập mã khách hàng..." readonly />
+                            @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "text-danger small mt-1" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                            @Html.EditorFor(m => m.DienThoai, new { htmlAttributes = new { @class = "form-control", Value = newAccount, placeholder = "Nhập số điện thoại..." } })
+                            @Html.ValidationMessageFor(m => m.DienThoai, "", new { @class = "text-danger small mt-1" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(m => m.TenKH, "Họ và Tên", new { @class = "form-label" })
+                            @Html.EditorFor(m => m.TenKH, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên khách hàng..." } })
+                            @Html.ValidationMessageFor(m => m.TenKH, "", new { @class = "text-danger small mt-1" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(m => m.GioiTinh, new { @class = "form-label" })
+                            <select name="GioiTinh" class="form-control">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            @Html.LabelFor(m => m.DiaChi, new { @class = "form-label" })
+                            @Html.EditorFor(m => m.DiaChi, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập địa chỉ..." } })
+                        </div>
+
+                        <button type="submit" class="btn-neon w-100 py-3">
+                            <i class="bi bi-person-plus-fill me-2"></i> Tạo & Tiếp tục
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

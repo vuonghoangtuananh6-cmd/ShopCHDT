@@ -1,0 +1,150 @@
+@model ShopQLCHDT.Models.ViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Đăng ký";
+}
+
+<!-- Register Page -->
+<section style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 2rem 0;">
+    <div class="neon-container" style="max-width: 600px;">
+        <div class="glass-card animate-fade-in">
+            <!-- Header -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="width: 70px; height: 70px; margin: 0 auto 1.5rem; background: var(--gradient-neon); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-person-plus" style="font-size: 2rem; color: var(--color-void);"></i>
+                </div>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">
+                    Tạo tài khoản mới
+                </h1>
+                <p style="color: var(--text-secondary);">
+                    Đăng ký để trải nghiệm mua sắm tuyệt vời
+                </p>
+            </div>
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert-neon alert-danger" style="margin-bottom: 1.5rem;">
+                        @Html.ValidationSummary(true, "Vui lòng kiểm tra lại thông tin:")
+                    </div>
+                }
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label class="form-label">Tên đăng nhập <span style="color: #ef4444;">*</span></label>
+                    <div style="position: relative;">
+                        @Html.TextBoxFor(m => m.TenDangNhap, new { @class = "form-control", placeholder = "Nhập tên đăng nhập", style = "padding-left: 48px;" })
+                        <i class="bi bi-at" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "text-danger", style = "font-size: 0.75rem; margin-top: 0.25rem; display: block;" })
+                </div>
+
+                <!-- Password Row -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Mật khẩu <span style="color: #ef4444;">*</span></label>
+                        <div style="position: relative;">
+                            @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "Nhập mật khẩu", style = "padding-left: 48px;" })
+                            <i class="bi bi-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger", style = "font-size: 0.75rem; margin-top: 0.25rem; display: block;" })
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Xác nhận mật khẩu <span style="color: #ef4444;">*</span></label>
+                        <div style="position: relative;">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Nhập lại mật khẩu", style = "padding-left: 48px;" })
+                            <i class="bi bi-lock-fill" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger", style = "font-size: 0.75rem; margin-top: 0.25rem; display: block;" })
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div style="height: 1px; background: var(--color-border); margin: 1.5rem 0;"></div>
+
+                <!-- Name & Gender Row -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Họ và tên <span style="color: #ef4444;">*</span></label>
+                        <div style="position: relative;">
+                            @Html.TextBoxFor(m => m.TenKH, new { @class = "form-control", placeholder = "Nhập họ và tên", style = "padding-left: 48px;" })
+                            <i class="bi bi-person" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.TenKH, "", new { @class = "text-danger", style = "font-size: 0.75rem; margin-top: 0.25rem; display: block;" })
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giới tính</label>
+                        <select name="GioiTinh" class="form-control">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label class="form-label">Số điện thoại <span style="color: #ef4444;">*</span></label>
+                    <div style="position: relative;">
+                        @Html.TextBoxFor(m => m.DienThoai, new { @class = "form-control", placeholder = "Nhập số điện thoại", style = "padding-left: 48px;" })
+                        <i class="bi bi-telephone" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.DienThoai, "", new { @class = "text-danger", style = "font-size: 0.75rem; margin-top: 0.25rem; display: block;" })
+                </div>
+
+                <!-- Address -->
+                <div class="form-group">
+                    <label class="form-label">Địa chỉ</label>
+                    <div style="position: relative;">
+                        @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", placeholder = "Nhập địa chỉ giao hàng", style = "padding-left: 48px;" })
+                        <i class="bi bi-geo-alt" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.DiaChi, "", new { @class = "text-danger", style = "font-size: 0.75rem; margin-top: 0.25rem; display: block;" })
+                </div>
+
+                <!-- Terms -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; color: var(--text-secondary); font-size: 0.875rem;">
+                        <input type="checkbox" required style="accent-color: var(--neon-cyan); margin-top: 3px;">
+                        <span>
+                            Tôi đồng ý với
+                            <a href="#" style="color: var(--neon-cyan); text-decoration: none;">Điều khoản dịch vụ</a>
+                            và
+                            <a href="#" style="color: var(--neon-cyan); text-decoration: none;">Chính sách bảo mật</a>
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-neon" style="width: 100%; padding: 1rem; font-size: 1rem;">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Đăng ký tài khoản</span>
+                </button>
+            }
+
+            <!-- Login Link -->
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+                Đã có tài khoản?
+                <a href="@Url.Action("Login", "Account")" style="color: var(--neon-cyan); text-decoration: none; font-weight: 600;">
+                    Đăng nhập ngay
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
+
+@section styles {
+    <style>
+        @@media (max-width: 600px) {
+            div[style*="grid-template-columns: 1fr 1fr"],
+            div[style*="grid-template-columns: 2fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        .text-danger {
+            color: #ef4444 !important;
+        }
+    </style>
+}

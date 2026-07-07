@@ -1,0 +1,112 @@
+﻿
+body {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding-top: 75px;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* NAVBAR */
+.navbar-custom {
+    background: #0b1120 !important;
+    border-bottom: 1px solid #1e293b;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #38bdf8 !important;
+}
+
+.nav-link {
+    color: #cbd5e1 !important;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+    .nav-link:hover {
+        color: #38bdf8 !important;
+    }
+
+/* Search bar */
+.search-box input {
+    border-radius: 30px;
+    padding-left: 18px;
+}
+
+.search-box button {
+    border-radius: 30px;
+}
+
+/* BODY CONTAINER */
+.body-content {
+    background: #0b1120;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+    box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+
+.dropdown-menu {
+    background: #1e293b;
+}
+
+.dropdown-item {
+    color: #cbd5e1;
+}
+
+    .dropdown-item:hover {
+        background: #334155;
+        color: white;
+    }
+
+.card-product {
+    background: #0b1120;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: 0.25s;
+}
+
+    .card-product:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        border-color: #38bdf8;
+    }
+/* CSS làm nút Switch to và đẹp hơn */
+.form-switch .form-check-input {
+    width: 3rem; /* Chiều rộng nút */
+    height: 1.5rem; /* Chiều cao nút */
+    cursor: pointer;
+}
+
+/* Màu khi bật (Checked) - Xanh lá */
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+/* Card hiệu ứng */
+.permission-card {
+    transition: all 0.2s;
+    border: 1px solid #e0e0e0;
+}
+
+    .permission-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+        border-color: #0d6efd;
+    }
+    /* Khi active (đang bật) thì card có nền xanh nhạt */
+    .permission-card.active-card {
+        background-color: #f8fcfd;
+        border-color: #198754;
+    }
+

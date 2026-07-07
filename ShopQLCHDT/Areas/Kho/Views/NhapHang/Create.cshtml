@@ -1,0 +1,206 @@
+﻿@model ShopQLCHDT.Models.ViewModels.PhieuNhapViewModel
+
+@{
+    ViewBag.Title = "Tạo Phiếu Nhập Hàng";
+}
+
+<div class="section pt-4">
+    <div class="neon-container">
+
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h2 class="section-title text-gradient m-0">Tạo Phiếu Nhập</h2>
+                <p class="text-secondary mt-1 mb-0">Nhập hàng mới vào kho từ nhà cung cấp.</p>
+            </div>
+            <a href="@Url.Action("Index", "TonKho")" class="btn-outline-neon">
+                <i class="bi bi-boxes me-2"></i> Xem tồn kho
+            </a>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-neon alert-danger mb-4" })
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <div class="glass-card h-100 animate-slide-up">
+                        <h4 class="text-white mb-4 pb-2 border-bottom border-secondary d-flex align-items-center">
+                            <span class="badge-neon me-2"><i class="bi bi-info-circle"></i></span>
+                            Thông tin chung
+                        </h4>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(m => m.MaNCC, "Nhà Cung Cấp", new { @class = "form-label" })
+                            <div class="position-relative">
+                                @Html.DropDownListFor(m => m.MaNCC, ViewBag.NhaCungCapList as SelectList, "--- Chọn Nhà Cung Cấp ---", new { @class = "form-control" })
+                                <i class="bi bi-chevron-down position-absolute top-50 end-0 translate-middle-y me-3 text-muted pe-none"></i>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.MaNCC, "", new { @class = "text-danger text-xs mt-1" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(m => m.GhiChu, "Ghi chú nhập hàng", new { @class = "form-label" })
+                            @Html.TextAreaFor(m => m.GhiChu, new { @class = "form-control", rows = 5, placeholder = "Nhập ghi chú (nếu có)..." })
+                        </div>
+
+                        <div class="mt-auto pt-4 border-top border-secondary">
+                            <button type="submit" class="btn-neon w-100 py-3 shadow-glow-cyan">
+                                <i class="bi bi-save2 me-2"></i> LƯU PHIẾU NHẬP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="glass-card h-100 animate-slide-up" style="animation-delay: 0.1s;">
+                        <h4 class="text-white mb-4 pb-2 border-bottom border-secondary d-flex align-items-center justify-content-between">
+                            <span>
+                                <span class="badge-neon badge-sale me-2"><i class="bi bi-box-seam"></i></span>
+                                Chi tiết hàng nhập
+                            </span>
+                        </h4>
+
+                        <div class="d-flex gap-3 mb-4 p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                            <div class="flex-grow-1 position-relative">
+                                <select id="product-select" class="form-control" style="background-image: none;">
+                                    <option value="">-- Tìm kiếm sản phẩm để thêm --</option>
+                                </select>
+                                <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y me-3 text-muted pe-none"></i>
+                            </div>
+                            <button type="button" id="btn-add-product" class="btn-neon flex-shrink-0">
+                                <i class="bi bi-plus-lg"></i> Thêm
+                            </button>
+                        </div>
+
+                        <div class="table-responsive custom-scrollbar mb-3" style="min-height: 300px; max-height: 500px;">
+                            <table class="table pos-table align-middle mb-0">
+                                <thead class="sticky-top" style="background: rgba(10,10,15,0.95); backdrop-filter: blur(5px);">
+                                    <tr>
+                                        <th class="ps-3" style="width: 40%">Sản Phẩm</th>
+                                        <th style="width: 15%">Số Lượng</th>
+                                        <th style="width: 25%">Giá Nhập</th>
+                                        <th class="text-end pe-3" style="width: 15%">Thành Tiền</th>
+                                        <th style="width: 5%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-items-tbody">
+                                </tbody>
+                            </table>
+
+                            <div id="empty-state" class="text-center py-5 text-muted">
+                                <i class="bi bi-basket3 fs-1 d-block mb-2 opacity-50"></i>
+                                <p>Chưa có sản phẩm nào được chọn.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Dữ liệu sản phẩm từ Server
+        const productData = @Html.Raw(Json.Encode(ViewBag.SanPhamList));
+        let addedProducts = [];
+
+        $(document).ready(function () {
+            // 1. Populate Dropdown
+            const productSelect = $('#product-select');
+            productData.forEach(sp => {
+                productSelect.append(
+                    `<option value="${sp.MASP}" data-name="${sp.TENSP}">${sp.TENSP}</option>`
+                );
+            });
+
+            // 2. Xử lý thêm sản phẩm
+            $('#btn-add-product').on('click', function () {
+                const selectedOption = $('#product-select option:selected');
+                const maSP = selectedOption.val();
+                const tenSP = selectedOption.data('name');
+
+                if (!maSP) {
+                    alert('Vui lòng chọn sản phẩm!');
+                    return;
+                }
+
+                if (addedProducts.includes(parseInt(maSP))) {
+                    alert('Sản phẩm này đã có trong danh sách!');
+                    return;
+                }
+
+                // Ẩn thông báo trống
+                $('#empty-state').hide();
+
+                addedProducts.push(parseInt(maSP));
+                const index = $('#detail-items-tbody tr').length;
+
+                const row = `
+                    <tr id="row-${maSP}" class="animate-fade-in">
+                        <td class="ps-3">
+                            <div class="fw-bold text-white">${tenSP}</div>
+                            <input type="hidden" name="DanhSachHangNhap[${index}].MaSP" value="${maSP}" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm qty-input text-center text-white bg-dark border-secondary"
+                                   name="DanhSachHangNhap[${index}].SoLuong" value="1" min="1" />
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="number" class="form-control price-input text-end text-white bg-dark border-secondary"
+                                       name="DanhSachHangNhap[${index}].GiaNhap" value="0" min="0" step="1000" />
+                                <span class="input-group-text bg-dark border-secondary text-muted">đ</span>
+                            </div>
+                        </td>
+                        <td class="total-col text-end pe-3 fw-bold text-accent font-monospace">0</td>
+                        <td class="text-end pe-3">
+                            <button type="button" class="btn btn-sm btn-outline-danger border-0 btn-remove" data-id="${maSP}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                $('#detail-items-tbody').append(row);
+            });
+
+            // 3. Xử lý xóa sản phẩm
+            $('#detail-items-tbody').on('click', '.btn-remove', function () {
+                const maSP = parseInt($(this).data('id'));
+                $(this).closest('tr').remove();
+                addedProducts = addedProducts.filter(id => id !== maSP);
+
+                if (addedProducts.length === 0) {
+                    $('#empty-state').show();
+                }
+
+                updateInputIndexes();
+            });
+
+            // 4. Tính thành tiền tự động
+            $('#detail-items-tbody').on('input', '.qty-input, .price-input', function () {
+                const row = $(this).closest('tr');
+                const qty = parseFloat(row.find('.qty-input').val()) || 0;
+                const price = parseFloat(row.find('.price-input').val()) || 0;
+                const total = qty * price;
+                row.find('.total-col').text(total.toLocaleString('vi-VN'));
+            });
+        });
+
+        // Hàm cập nhật lại index cho name="DanhSachHangNhap[i]..." để MVC Binding đúng
+        function updateInputIndexes() {
+            $('#detail-items-tbody tr').each(function (index, tr) {
+                $(tr).find('input').each(function () {
+                    const name = $(this).attr('name');
+                    if (name) {
+                        const newName = name.replace(/\[\d+\]/, `[${index}]`);
+                        $(this).attr('name', newName);
+                    }
+                });
+            });
+        }
+    </script>
+}

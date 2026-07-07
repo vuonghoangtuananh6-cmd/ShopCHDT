@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="QLY_SHOPDTDD1ModelStoreContainer" CdmEntityContainer="QLY_SHOPDTDD1Entities">
+    <EntitySetMapping Name="BOPHANKHO">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.BOPHANKHO">
+        <MappingFragment StoreEntitySet="BOPHANKHO">
+          <ScalarProperty Name="MANQL" ColumnName="MANQL" />
+          <ScalarProperty Name="TENNQL" ColumnName="TENNQL" />
+          <ScalarProperty Name="NHIEMVU" ColumnName="NHIEMVU" />
+          <ScalarProperty Name="DIENTHOAI" ColumnName="DIENTHOAI" />
+          <ScalarProperty Name="LUONG" ColumnName="LUONG" />
+          <ScalarProperty Name="MASP" ColumnName="MASP" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CHITIETHD">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.CHITIETHD">
+        <MappingFragment StoreEntitySet="CHITIETHD">
+          <ScalarProperty Name="MAHD" ColumnName="MAHD" />
+          <ScalarProperty Name="MASP" ColumnName="MASP" />
+          <ScalarProperty Name="SOLUONG" ColumnName="SOLUONG" />
+          <ScalarProperty Name="THANHTIEN" ColumnName="THANHTIEN" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CHITIETPN">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.CHITIETPN">
+        <MappingFragment StoreEntitySet="CHITIETPN">
+          <ScalarProperty Name="MASP" ColumnName="MASP" />
+          <ScalarProperty Name="MAPN" ColumnName="MAPN" />
+          <ScalarProperty Name="SOLUONG" ColumnName="SOLUONG" />
+          <ScalarProperty Name="GIANHAP" ColumnName="GIANHAP" />
+          <ScalarProperty Name="THANHTIEN" ColumnName="THANHTIEN" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HOADON">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.HOADON">
+        <MappingFragment StoreEntitySet="HOADON">
+          <ScalarProperty Name="MAHD" ColumnName="MAHD" />
+          <ScalarProperty Name="NGAYBAN" ColumnName="NGAYBAN" />
+          <ScalarProperty Name="NGAYTHANHTOAN" ColumnName="NGAYTHANHTOAN" />
+          <ScalarProperty Name="GIAMGIA" ColumnName="GIAMGIA" />
+          <ScalarProperty Name="TONGTIEN" ColumnName="TONGTIEN" />
+          <ScalarProperty Name="GHICHU" ColumnName="GHICHU" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+          <ScalarProperty Name="MAKH" ColumnName="MAKH" />
+          <ScalarProperty Name="MANV" ColumnName="MANV" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KHACHHANG">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.KHACHHANG">
+        <MappingFragment StoreEntitySet="KHACHHANG">
+          <ScalarProperty Name="MAKH" ColumnName="MAKH" />
+          <ScalarProperty Name="TENKH" ColumnName="TENKH" />
+          <ScalarProperty Name="GIOITINH" ColumnName="GIOITINH" />
+          <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
+          <ScalarProperty Name="DIENTHOAI" ColumnName="DIENTHOAI" />
+          <ScalarProperty Name="LOAIKH" ColumnName="LOAIKH" />
+          <ScalarProperty Name="IDTK" ColumnName="IDTK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KHO_SANPHAM">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.KHO_SANPHAM">
+        <MappingFragment StoreEntitySet="KHO_SANPHAM">
+          <ScalarProperty Name="MASP" ColumnName="MASP" />
+          <ScalarProperty Name="SOLUONGTON" ColumnName="SOLUONGTON" />
+          <ScalarProperty Name="MAPN" ColumnName="MAPN" />
+          <ScalarProperty Name="MAHD" ColumnName="MAHD" />
+          <ScalarProperty Name="NGAYCAPNHAT" ColumnName="NGAYCAPNHAT" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NHACUNGCAP">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.NHACUNGCAP">
+        <MappingFragment StoreEntitySet="NHACUNGCAP">
+          <ScalarProperty Name="MANCC" ColumnName="MANCC" />
+          <ScalarProperty Name="TENNCC" ColumnName="TENNCC" />
+          <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
+          <ScalarProperty Name="DIENTHOAI" ColumnName="DIENTHOAI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NHANVIEN">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.NHANVIEN">
+        <MappingFragment StoreEntitySet="NHANVIEN">
+          <ScalarProperty Name="MANV" ColumnName="MANV" />
+          <ScalarProperty Name="TENNV" ColumnName="TENNV" />
+          <ScalarProperty Name="GIOITINH" ColumnName="GIOITINH" />
+          <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
+          <ScalarProperty Name="LUONG" ColumnName="LUONG" />
+          <ScalarProperty Name="DIENTHOAI" ColumnName="DIENTHOAI" />
+          <ScalarProperty Name="IDTK" ColumnName="IDTK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHANQUYEN">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.PHANQUYEN">
+        <MappingFragment StoreEntitySet="PHANQUYEN">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="QL_DONHANG" ColumnName="QL_DONHANG" />
+          <ScalarProperty Name="QL_SANPHAM" ColumnName="QL_SANPHAM" />
+          <ScalarProperty Name="QL_KHACHHANG" ColumnName="QL_KHACHHANG" />
+          <ScalarProperty Name="QL_NHANVIEN" ColumnName="QL_NHANVIEN" />
+          <ScalarProperty Name="QL_NHACC" ColumnName="QL_NHACC" />
+          <ScalarProperty Name="QL_NHAPHANG" ColumnName="QL_NHAPHANG" />
+          <ScalarProperty Name="QL_BPKHO" ColumnName="QL_BPKHO" />
+          <ScalarProperty Name="THONGKE" ColumnName="THONGKE" />
+          <ScalarProperty Name="MANV" ColumnName="MANV" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHIEUNHAP">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.PHIEUNHAP">
+        <MappingFragment StoreEntitySet="PHIEUNHAP">
+          <ScalarProperty Name="MAPN" ColumnName="MAPN" />
+          <ScalarProperty Name="NGAYNHAP" ColumnName="NGAYNHAP" />
+          <ScalarProperty Name="TIENNHAP" ColumnName="TIENNHAP" />
+          <ScalarProperty Name="GHICHU" ColumnName="GHICHU" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+          <ScalarProperty Name="MANCC" ColumnName="MANCC" />
+          <ScalarProperty Name="MANQL" ColumnName="MANQL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SANPHAM">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.SANPHAM">
+        <MappingFragment StoreEntitySet="SANPHAM">
+          <ScalarProperty Name="MASP" ColumnName="MASP" />
+          <ScalarProperty Name="TENSP" ColumnName="TENSP" />
+          <ScalarProperty Name="DVT" ColumnName="DVT" />
+          <ScalarProperty Name="GIABAN" ColumnName="GIABAN" />
+          <ScalarProperty Name="THONGTIN" ColumnName="THONGTIN" />
+          <ScalarProperty Name="HINHANH" ColumnName="HINHANH" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+          <ScalarProperty Name="MATH" ColumnName="MATH" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TAIKHOAN">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.TAIKHOAN">
+        <MappingFragment StoreEntitySet="TAIKHOAN">
+          <ScalarProperty Name="IDTK" ColumnName="IDTK" />
+          <ScalarProperty Name="TENDANGNHAP" ColumnName="TENDANGNHAP" />
+          <ScalarProperty Name="MATKHAU" ColumnName="MATKHAU" />
+          <ScalarProperty Name="LOAITK" ColumnName="LOAITK" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="THUONGHIEU">
+      <EntityTypeMapping TypeName="QLY_SHOPDTDD1Model.THUONGHIEU">
+        <MappingFragment StoreEntitySet="THUONGHIEU">
+          <ScalarProperty Name="MATH" ColumnName="MATH" />
+          <ScalarProperty Name="TENTH" ColumnName="TENTH" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_CapNhatQuyen" FunctionName="QLY_SHOPDTDD1Model.Store.sp_CapNhatQuyen" />
+    <FunctionImportMapping FunctionImportName="sp_DuyetDonHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_DuyetDonHang" />
+    <FunctionImportMapping FunctionImportName="sp_LapChiTietHoaDon" FunctionName="QLY_SHOPDTDD1Model.Store.sp_LapChiTietHoaDon" />
+    <FunctionImportMapping FunctionImportName="sp_LapChiTietPhieuNhap" FunctionName="QLY_SHOPDTDD1Model.Store.sp_LapChiTietPhieuNhap" />
+    <FunctionImportMapping FunctionImportName="sp_LapHoaDon" FunctionName="QLY_SHOPDTDD1Model.Store.sp_LapHoaDon" />
+    <FunctionImportMapping FunctionImportName="sp_LapPhieuNhap" FunctionName="QLY_SHOPDTDD1Model.Store.sp_LapPhieuNhap" />
+    <FunctionImportMapping FunctionImportName="sp_SuaKhachHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_SuaKhachHang" />
+    <FunctionImportMapping FunctionImportName="sp_SuaMatHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_SuaMatHang" />
+    <FunctionImportMapping FunctionImportName="sp_SuaNhanVien" FunctionName="QLY_SHOPDTDD1Model.Store.sp_SuaNhanVien" />
+    <FunctionImportMapping FunctionImportName="sp_ThanhToanHoaDon" FunctionName="QLY_SHOPDTDD1Model.Store.sp_ThanhToanHoaDon" />
+    <FunctionImportMapping FunctionImportName="sp_ThanhToanPhieuNhap" FunctionName="QLY_SHOPDTDD1Model.Store.sp_ThanhToanPhieuNhap" />
+    <FunctionImportMapping FunctionImportName="sp_ThemKhachHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_ThemKhachHang" />
+    <FunctionImportMapping FunctionImportName="sp_ThemMatHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_ThemMatHang" />
+    <FunctionImportMapping FunctionImportName="sp_ThemNhanVien" FunctionName="QLY_SHOPDTDD1Model.Store.sp_ThemNhanVien" />
+    <FunctionImportMapping FunctionImportName="sp_XemDanhSachKhachHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_XemDanhSachKhachHang">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="QLY_SHOPDTDD1Model.sp_XemDanhSachKhachHang_Result">
+          <ScalarProperty Name="MAKH" ColumnName="MAKH" />
+          <ScalarProperty Name="TENKH" ColumnName="TENKH" />
+          <ScalarProperty Name="GIOITINH" ColumnName="GIOITINH" />
+          <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
+          <ScalarProperty Name="DIENTHOAI" ColumnName="DIENTHOAI" />
+          <ScalarProperty Name="LOAIKH" ColumnName="LOAIKH" />
+          <ScalarProperty Name="IDTK" ColumnName="IDTK" />
+          <ScalarProperty Name="TENDANGNHAP" ColumnName="TENDANGNHAP" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_XemDanhSachMatHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_XemDanhSachMatHang">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="QLY_SHOPDTDD1Model.sp_XemDanhSachMatHang_Result">
+          <ScalarProperty Name="MASP" ColumnName="MASP" />
+          <ScalarProperty Name="TENSP" ColumnName="TENSP" />
+          <ScalarProperty Name="DVT" ColumnName="DVT" />
+          <ScalarProperty Name="GIABAN" ColumnName="GIABAN" />
+          <ScalarProperty Name="THONGTIN" ColumnName="THONGTIN" />
+          <ScalarProperty Name="HINHANH" ColumnName="HINHANH" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+          <ScalarProperty Name="MATH" ColumnName="MATH" />
+          <ScalarProperty Name="TENTH" ColumnName="TENTH" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_XemDanhSachNhanVien" FunctionName="QLY_SHOPDTDD1Model.Store.sp_XemDanhSachNhanVien">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="QLY_SHOPDTDD1Model.sp_XemDanhSachNhanVien_Result">
+          <ScalarProperty Name="MANV" ColumnName="MANV" />
+          <ScalarProperty Name="TENNV" ColumnName="TENNV" />
+          <ScalarProperty Name="GIOITINH" ColumnName="GIOITINH" />
+          <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
+          <ScalarProperty Name="LUONG" ColumnName="LUONG" />
+          <ScalarProperty Name="DIENTHOAI" ColumnName="DIENTHOAI" />
+          <ScalarProperty Name="IDTK" ColumnName="IDTK" />
+          <ScalarProperty Name="TENDANGNHAP" ColumnName="TENDANGNHAP" />
+          <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_XoaKhachHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_XoaKhachHang" />
+    <FunctionImportMapping FunctionImportName="sp_XoaMatHang" FunctionName="QLY_SHOPDTDD1Model.Store.sp_XoaMatHang" />
+    <FunctionImportMapping FunctionImportName="sp_XoaNhanVien" FunctionName="QLY_SHOPDTDD1Model.Store.sp_XoaNhanVien" />
+  </EntityContainerMapping>
+</Mapping>

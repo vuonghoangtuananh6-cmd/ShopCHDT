@@ -1,0 +1,352 @@
+@model ShopQLCHDT.Models.SANPHAM
+@{
+    ViewBag.Title = Model.TENSP;
+    int soLuongTon = (int)ViewBag.SoLuongTon;
+    bool inStock = soLuongTon > 0;
+}
+
+<!-- Page Header -->
+<section style="padding: 1.5rem 0;">
+    <div class="neon-container">
+        <!-- Breadcrumb -->
+        <nav>
+            <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li><a href="@Url.Action("Index", "Home")" style="color: var(--text-muted); text-decoration: none;">Trang chủ</a></li>
+                <li style="color: var(--text-muted);">/</li>
+                <li><a href="@Url.Action("Index", "Product")" style="color: var(--text-muted); text-decoration: none;">Sản phẩm</a></li>
+                <li style="color: var(--text-muted);">/</li>
+                <li style="color: var(--neon-cyan);">@Model.TENSP</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Product Detail -->
+<section class="section" style="padding-top: 0;">
+    <div class="neon-container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;">
+            <!-- Product Image -->
+            <div class="glass-card" style="padding: 2rem; position: sticky; top: 100px;">
+                <div style="position: relative; aspect-ratio: 1; background: linear-gradient(180deg, var(--color-elevated) 0%, var(--color-surface) 100%); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                    <!-- Glow effect -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60%; aspect-ratio: 1; background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%); pointer-events: none;"></div>
+
+                    <img id="mainImage"
+                         src="@Url.Content("~/Content/Images/" + Model.HINHANH)"
+                         alt="@Model.TENSP"
+                         style="width: 80%; height: 80%; object-fit: contain; position: relative; z-index: 1; transition: transform 0.5s ease;">
+
+                    <!-- Zoom hint -->
+                    <div style="position: absolute; bottom: 1rem; right: 1rem; padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.5); border-radius: var(--radius-full); font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="bi bi-zoom-in"></i>
+                        Hover để phóng to
+                    </div>
+                </div>
+
+                <!-- Thumbnail Gallery -->
+                <div style="display: flex; gap: 0.75rem; margin-top: 1rem; justify-content: center;">
+                    <div class="thumbnail active" style="width: 70px; height: 70px; border: 2px solid var(--neon-cyan); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all 0.2s;">
+                        <img src="@Url.Content("~/Content/Images/" + Model.HINHANH)"
+                             alt="Thumbnail"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="animate-fade-in">
+                <!-- Brand & Title -->
+                @if (Model.THUONGHIEU != null)
+                {
+                    <div style="margin-bottom: 0.5rem;">
+                        <a href="@Url.Action("Index", "Product", new { brand = Model.MATH })" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; background: rgba(0, 245, 255, 0.1); border: 1px solid rgba(0, 245, 255, 0.3); border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--neon-cyan); text-decoration: none;">
+                            @Model.THUONGHIEU.TENTH
+                        </a>
+                    </div>
+                }
+
+                <h1 style="font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem;">
+                    @Model.TENSP
+                </h1>
+
+                <!-- Rating & Reviews (Placeholder) -->
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; gap: 0.25rem; color: var(--neon-yellow);">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">4.5 (128 đánh giá)</span>
+                </div>
+
+                <!-- Price -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: baseline; gap: 0.5rem;">
+                        <span style="font-family: var(--font-display); font-size: 3rem; font-weight: 800; color: var(--neon-cyan);">
+                            @Model.GIABAN.Value.ToString("N0")
+                        </span>
+                        <span style="font-size: 1.5rem; color: var(--text-muted);">đ</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem;">
+                        Giá đã bao gồm VAT. Miễn phí vận chuyển toàn quốc.
+                    </p>
+                </div>
+
+                <!-- Stock Status -->
+                @if (inStock)
+                {
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                        <div style="width: 10px; height: 10px; background: var(--neon-green); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                        <span style="font-weight: 600; color: var(--neon-green);">Còn hàng</span>
+                        <span style="color: var(--text-muted);">(@soLuongTon sản phẩm)</span>
+                    </div>
+                }
+                else
+                {
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                        <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i>
+                        <span style="font-weight: 600; color: #ef4444;">Tạm hết hàng</span>
+                    </div>
+                }
+
+                <!-- Divider -->
+                <div style="height: 1px; background: var(--color-border); margin: 1.5rem 0;"></div>
+
+                <!-- Description -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-secondary);">
+                        Mô tả sản phẩm
+                    </h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        @(string.IsNullOrEmpty(Model.THONGTIN) ? "Chưa có thông tin mô tả cho sản phẩm này." : Model.THONGTIN)
+                    </p>
+                </div>
+
+                <!-- Add to Cart Form -->
+                @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post, new { id = "addToCartForm" }))
+                {
+                    @Html.Hidden("productId", Model.MASP)
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+                        <!-- Quantity Selector -->
+                        <div style="display: flex; align-items: center; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;">
+                            <button type="button" onclick="changeQuantity(-1)" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-secondary); cursor: pointer; transition: all 0.2s;" @(!inStock ? "disabled" : "")>
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                            <input type="number" name="quantity" id="quantity" value="1" min="1" max="@soLuongTon"
+                                   style="width: 60px; height: 44px; text-align: center; background: transparent; border: none; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); color: var(--text-primary); font-weight: 600; font-size: 1rem;" @(!inStock ? "disabled" : "")>
+                            <button type="button" onclick="changeQuantity(1)" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-secondary); cursor: pointer; transition: all 0.2s;" @(!inStock ? "disabled" : "")>
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button type="submit" class="btn-neon" style="flex: 1; padding: 1rem 2rem; font-size: 1rem;" @(!inStock ? "disabled style=opacity:0.5;cursor:not-allowed;" : "")>
+                            <i class="bi bi-bag-plus"></i>
+                            <span>@(inStock ? "Thêm vào giỏ hàng" : "Hết hàng")</span>
+                        </button>
+
+                        <!-- Wishlist Button -->
+                        <button type="button" class="btn-outline-neon" style="padding: 1rem;" title="Thêm vào yêu thích">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                    </div>
+                }
+
+                <!-- Buy Now Button -->
+                @if (inStock)
+                {
+                    <a href="@Url.Action("Index", "Cart")" class="hero-btn-secondary" style="width: 100%; justify-content: center; padding: 1rem;">
+                        <i class="bi bi-lightning-charge"></i>
+                        <span>Mua ngay</span>
+                    </a>
+                }
+
+                <!-- Divider -->
+                <div style="height: 1px; background: var(--color-border); margin: 2rem 0;"></div>
+
+                <!-- Features -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 245, 255, 0.05); border-radius: var(--radius-lg);">
+                        <div style="width: 40px; height: 40px; background: rgba(0, 245, 255, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-truck" style="color: var(--neon-cyan);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.875rem;">Miễn phí giao hàng</div>
+                            <div style="color: var(--text-muted); font-size: 0.75rem;">Đơn từ 500K</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(34, 197, 94, 0.05); border-radius: var(--radius-lg);">
+                        <div style="width: 40px; height: 40px; background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-shield-check" style="color: var(--neon-green);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.875rem;">Bảo hành 12 tháng</div>
+                            <div style="color: var(--text-muted); font-size: 0.75rem;">Chính hãng</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(249, 115, 22, 0.05); border-radius: var(--radius-lg);">
+                        <div style="width: 40px; height: 40px; background: rgba(249, 115, 22, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-arrow-repeat" style="color: var(--neon-orange);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.875rem;">Đổi trả 30 ngày</div>
+                            <div style="color: var(--text-muted); font-size: 0.75rem;">Miễn phí</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(168, 85, 247, 0.05); border-radius: var(--radius-lg);">
+                        <div style="width: 40px; height: 40px; background: rgba(168, 85, 247, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-headset" style="color: var(--neon-purple);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.875rem;">Hỗ trợ 24/7</div>
+                            <div style="color: var(--text-muted); font-size: 0.75rem;">1900 1234</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back Link -->
+<section style="padding-bottom: 4rem;">
+    <div class="neon-container">
+        <a href="@Url.Action("Index", "Product")" class="btn-outline-neon">
+            <i class="bi bi-arrow-left"></i>
+            Quay lại danh sách sản phẩm
+        </a>
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        function changeQuantity(delta) {
+            const input = document.getElementById('quantity');
+            const currentValue = parseInt(input.value) || 1;
+            const maxValue = parseInt(input.max) || 99;
+            const newValue = Math.max(1, Math.min(maxValue, currentValue + delta));
+            input.value = newValue;
+        }
+
+        // Image zoom on hover
+        const mainImage = document.getElementById('mainImage');
+        const imageContainer = mainImage.parentElement;
+
+        imageContainer.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+
+            mainImage.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+            mainImage.style.transform = 'scale(1.5)';
+        });
+
+        imageContainer.addEventListener('mouseleave', function() {
+            mainImage.style.transform = 'scale(1)';
+        });
+
+        // Form submit with AJAX
+        document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) {
+                        badge.textContent = data.cartCount;
+                    } else {
+                        const cartBtn = document.querySelector('.navbar-action-btn[title="Giỏ hàng"]');
+                        if (cartBtn) {
+                            const newBadge = document.createElement('span');
+                            newBadge.className = 'cart-badge';
+                            newBadge.textContent = data.cartCount;
+                            cartBtn.appendChild(newBadge);
+                        }
+                    }
+                    showToast('Đã thêm vào giỏ hàng!', 'success');
+                } else {
+                    showToast(data.message || 'Có lỗi xảy ra', 'error');
+                }
+            })
+            .catch(error => {
+                // Fallback: submit normally
+                this.submit();
+            });
+        });
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
+                color: white;
+                border-radius: 12px;
+                font-weight: 500;
+                z-index: 9999;
+                animation: slideIn 0.3s ease-out;
+                backdrop-filter: blur(10px);
+            `;
+            toast.textContent = message;
+
+            if (!document.querySelector('#toast-styles')) {
+                const style = document.createElement('style');
+                style.id = 'toast-styles';
+                style.textContent = `
+                    @@keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @@keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+}
+
+@section styles {
+    <style>
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @@media (max-width: 992px) {
+            .neon-container > div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+            }
+
+            .glass-card[style*="position: sticky"] {
+                position: relative !important;
+                top: auto !important;
+            }
+        }
+    </style>
+}

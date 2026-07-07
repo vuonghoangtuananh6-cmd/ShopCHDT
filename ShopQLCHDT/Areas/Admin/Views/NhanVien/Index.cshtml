@@ -1,0 +1,173 @@
+﻿@model IEnumerable<ShopQLCHDT.Models.NHANVIEN>
+
+@{
+    ViewBag.Title = "Quản lý Nhân viên";
+}
+
+<div class="section pt-4">
+    <div class="neon-container">
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-5 gap-3">
+            <div>
+                <h2 class="section-title text-gradient m-0">Quản lý Nhân sự</h2>
+                <p class="text-secondary mt-1 mb-0">Danh sách nhân viên và tài khoản hệ thống.</p>
+            </div>
+
+            <a href="@Url.Action("Create")" class="btn-neon shadow-glow-cyan">
+                <i class="bi bi-person-plus-fill me-2"></i> Thêm Nhân viên
+            </a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-neon alert-success mb-4 animate-fade-in d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="glass-card animate-slide-up p-0 overflow-hidden">
+            <div class="table-responsive custom-scrollbar">
+                <table class="table pos-table align-middle mb-0 table-hover-neon">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 text-secondary text-uppercase text-xs letter-spacing-1">Nhân viên</th>
+                            <th class="py-3 text-secondary text-uppercase text-xs letter-spacing-1">Tài khoản</th>
+                            <th class="py-3 text-secondary text-uppercase text-xs letter-spacing-1">Liên hệ</th>
+                            <th class="text-end py-3 text-secondary text-uppercase text-xs letter-spacing-1">Lương cơ bản</th>
+                            <th class="text-center py-3 text-secondary text-uppercase text-xs letter-spacing-1">Trạng thái</th>
+                            <th class="text-end pe-4 py-3 text-secondary text-uppercase text-xs letter-spacing-1">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                bool isActive = item.TAIKHOAN?.TRANGTHAI == "Hoạt động";
+
+                                <tr class="transition-base">
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="d-flex align-items-center justify-content-center rounded-circle border border-secondary shadow-sm"
+                                                 style="width: 40px; height: 40px; background: rgba(6, 182, 212, 0.1); color: var(--neon-cyan); font-weight: bold; font-size: 16px;">
+                                                @(item.TENNV?.Substring(0, 1) ?? "N")
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-white fs-6">@item.TENNV</div>
+                                                <div class="text-muted text-xs">MNV: #@item.MANV</div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-person-badge text-secondary"></i>
+                                            <span class="text-white font-monospace">@(item.TAIKHOAN?.TENDANGNHAP ?? "---")</span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="text-secondary font-monospace text-sm">
+                                            @(item.DIENTHOAI ?? "---")
+                                        </span>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span class="text-accent fw-bold font-monospace">
+                                            @((item.LUONG ?? 0).ToString("N0")) <span class="text-muted text-xs">đ</span>
+                                        </span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (isActive)
+                                        {
+                                            <span class="badge-neon badge-new">
+                                                <i class="bi bi-check-circle-fill me-1"></i> Hoạt động
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge-neon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                                                <i class="bi bi-ban me-1"></i> Đã khóa
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="@Url.Action("Edit", "PhanQuyen", new { id = item.MANV })"
+                                               class="btn btn-sm btn-outline-info border-0 bg-opacity-10"
+                                               style="background: rgba(168, 85, 247, 0.1); color: var(--neon-purple);"
+                                               title="Phân quyền hệ thống">
+                                                <i class="bi bi-shield-lock-fill"></i>
+                                            </a>
+
+                                            <a href="@Url.Action("Edit", new { id = item.MANV })"
+                                               class="btn btn-sm btn-outline-warning border-0 bg-opacity-10"
+                                               style="background: rgba(251, 191, 36, 0.1);"
+                                               title="Sửa thông tin">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+
+                                            <a href="@Url.Action("Delete", new { id = item.MANV })"
+                                               class="btn btn-sm btn-outline-danger border-0 bg-opacity-10"
+                                               style="background: rgba(239, 68, 68, 0.1);"
+                                               title="Vô hiệu hóa tài khoản">
+                                                <i class="bi bi-person-x-fill"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="d-flex flex-column align-items-center text-muted">
+                                        <i class="bi bi-people fs-1 mb-2 opacity-50"></i>
+                                        <p class="m-0">Chưa có nhân viên nào trong hệ thống.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="px-4 py-3 border-top border-secondary d-flex justify-content-between align-items-center bg-dark bg-opacity-25">
+                <span class="text-secondary text-xs text-uppercase fw-bold">
+                    Tổng số: <span class="text-white">@Model.Count()</span> nhân sự
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table-hover-neon tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+        }
+
+        /* Hiệu ứng hover cho các nút hành động */
+        .btn-outline-info:hover {
+            background: var(--neon-purple) !important;
+            color: #fff !important;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        .btn-outline-warning:hover {
+            background: var(--neon-yellow) !important;
+            color: #000 !important;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        .btn-outline-danger:hover {
+            background: #ef4444 !important;
+            color: #fff !important;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+    </style>
+}

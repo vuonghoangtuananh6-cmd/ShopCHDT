@@ -1,0 +1,72 @@
+﻿@model ShopQLCHDT.Models.NHANVIEN
+
+@{
+    ViewBag.Title = "Vô hiệu hóa Nhân viên";
+}
+
+<div class="section pt-5">
+    <div class="neon-container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+
+                <div class="glass-card animate-slide-up p-5 text-center"
+                     style="border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);">
+
+                    <div class="mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                             style="width: 80px; height: 80px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444;">
+                            <i class="bi bi-person-x-fill fs-1"></i>
+                        </div>
+                    </div>
+
+                    <h3 class="text-white mb-3">Vô hiệu hóa Tài khoản?</h3>
+
+                    <p class="text-secondary mb-4">
+                        Nhân viên này sẽ không thể đăng nhập vào hệ thống nữa.<br />
+                        Bạn có chắc chắn muốn thực hiện?
+                    </p>
+
+                    <div class="d-flex align-items-center gap-3 p-3 mb-5 rounded text-start position-relative overflow-hidden"
+                         style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-dark border border-secondary flex-shrink-0"
+                             style="width: 50px; height: 50px; color: var(--neon-cyan); font-weight: bold;">
+                            @(Model.TENNV?.Substring(0, 1) ?? "NV")
+                        </div>
+
+                        <div class="flex-grow-1" style="min-width: 0;">
+                            <div class="fw-bold text-white text-truncate">@Model.TENNV</div>
+                            <div class="d-flex align-items-center gap-2 mt-1">
+                                <i class="bi bi-person-badge text-secondary text-xs"></i>
+                                <span class="text-muted text-xs font-monospace">
+                                    @(Model.TAIKHOAN?.TENDANGNHAP ?? "Chưa có TK")
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="align-self-center">
+                            <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25">Đã khóa</span>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("Delete", "NhanVien", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="d-flex flex-column gap-3">
+                            <button type="submit" class="btn-neon w-100 py-3 fw-bold text-uppercase fs-6 border-0"
+                                    style="background: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); color: white;">
+                                <i class="bi bi-slash-circle me-2"></i> Xác nhận Vô hiệu hóa
+                            </button>
+
+                            <a href="@Url.Action("Index")" class="btn-outline-neon border-0 text-secondary py-2">
+                                Hủy bỏ, quay lại
+                            </a>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

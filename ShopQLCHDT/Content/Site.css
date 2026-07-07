@@ -1,0 +1,67 @@
+﻿body {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding-top: 75px;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* NAVBAR */
+.navbar-custom {
+    background: #0b1120 !important;
+    border-bottom: 1px solid #1e293b;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #38bdf8 !important;
+}
+
+.nav-link {
+    color: #cbd5e1 !important;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+    .nav-link:hover {
+        color: #38bdf8 !important;
+    }
+
+/* Search bar */
+.search-box input {
+    border-radius: 30px;
+    padding-left: 18px;
+}
+
+.search-box button {
+    border-radius: 30px;
+}
+
+/* BODY CONTAINER */
+.body-content {
+    background: #0b1120;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+    box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+
+.dropdown-menu {
+    background: #1e293b;
+}
+
+.dropdown-item {
+    color: #cbd5e1;
+}
+
+    .dropdown-item:hover {
+        background: #334155;
+        color: white;
+    }

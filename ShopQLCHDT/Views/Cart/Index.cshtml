@@ -1,0 +1,273 @@
+@model List<ShopQLCHDT.Models.ViewModels.CartItemViewModel>
+@{
+    ViewBag.Title = "Giỏ hàng";
+    decimal tongTien = Model.Sum(item => item.ThanhTien);
+    int totalItems = Model.Sum(item => item.SoLuong);
+}
+
+<!-- Page Header -->
+<section style="padding: 2rem 0;">
+    <div class="neon-container">
+        <!-- Breadcrumb -->
+        <nav style="margin-bottom: 1.5rem;">
+            <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li><a href="@Url.Action("Index", "Home")" style="color: var(--text-muted); text-decoration: none;">Trang chủ</a></li>
+                <li style="color: var(--text-muted);">/</li>
+                <li style="color: var(--neon-cyan);">Giỏ hàng</li>
+            </ol>
+        </nav>
+
+        <h1 style="font-family: var(--font-display); font-size: 2.5rem; font-weight: 800;">
+            Giỏ hàng của bạn
+            @if (totalItems > 0)
+            {
+                <span style="font-size: 1.5rem; color: var(--text-muted); font-weight: 500;">(@totalItems sản phẩm)</span>
+            }
+        </h1>
+    </div>
+</section>
+
+<!-- Cart Content -->
+<section class="section" style="padding-top: 0;">
+    <div class="neon-container">
+        @if (Model.Count > 0)
+        {
+            <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem; align-items: start;">
+                <!-- Cart Items -->
+                <div class="glass-card" style="padding: 0; overflow: hidden;">
+                    <!-- Header -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 1rem; padding: 1rem 1.5rem; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--color-border); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">
+                        <div>Sản phẩm</div>
+                        <div style="text-align: center;">Đơn giá</div>
+                        <div style="text-align: center;">Số lượng</div>
+                        <div style="text-align: right;">Thành tiền</div>
+                        <div style="width: 40px;"></div>
+                    </div>
+
+                    <!-- Items -->
+                    @foreach (var item in Model)
+                    {
+                        <div class="cart-item" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 1rem; padding: 1.5rem; align-items: center; border-bottom: 1px solid var(--color-border-subtle); transition: background 0.2s;">
+                            <!-- Product Info -->
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 80px; height: 80px; background: var(--color-elevated); border-radius: var(--radius-lg); overflow: hidden; flex-shrink: 0;">
+                                    <img src="~/Content/Images/@item.HinhAnh" alt="@item.TenSP"
+                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <a href="@Url.Action("Details", "Product", new { id = item.MaSP })" style="font-weight: 600; color: var(--text-primary); text-decoration: none; display: block; margin-bottom: 0.25rem;">
+                                        @item.TenSP
+                                    </a>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">
+                                        Còn @item.SoLuongTon sản phẩm
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Unit Price -->
+                            <div style="text-align: center; color: var(--text-secondary);">
+                                @item.DonGia.ToString("N0") đ
+                            </div>
+
+                            <!-- Quantity -->
+                            <div style="display: flex; justify-content: center;">
+                                <div style="display: flex; align-items: center; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden;">
+                                    <button type="button" onclick="updateQuantity(@item.MaSP, @(item.SoLuong - 1))"
+                                            style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-secondary); cursor: pointer;"
+                                            @(item.SoLuong <= 1 ? "disabled" : "")>
+                                        <i class="bi bi-dash"></i>
+                                    </button>
+                                    <span style="width: 40px; text-align: center; font-weight: 600;">@item.SoLuong</span>
+                                    <button type="button" onclick="updateQuantity(@item.MaSP, @(item.SoLuong + 1))"
+                                            style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-secondary); cursor: pointer;"
+                                            @(item.SoLuong >= item.SoLuongTon ? "disabled" : "")>
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Subtotal -->
+                            <div style="text-align: right;">
+                                <span style="font-family: var(--font-display); font-weight: 700; color: var(--neon-cyan);">
+                                    @item.ThanhTien.ToString("N0") đ
+                                </span>
+                            </div>
+
+                            <!-- Remove -->
+                            <div>
+                                <a href="@Url.Action("RemoveFromCart", "Cart", new { productId = item.MaSP })"
+                                   class="product-card-action-btn" title="Xóa sản phẩm"
+                                   style="width: 36px; height: 36px; color: #ef4444;">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Continue Shopping -->
+                    <div style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <a href="@Url.Action("Index", "Product")" class="btn-outline-neon" style="padding: 0.75rem 1.5rem;">
+                            <i class="bi bi-arrow-left"></i>
+                            Tiếp tục mua sắm
+                        </a>
+                        <a href="@Url.Action("ClearCart", "Cart")" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem;" onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
+                            <i class="bi bi-trash"></i>
+                            Xóa tất cả
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div style="position: sticky; top: 100px;">
+                    <div class="glass-card">
+                        <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem;">
+                            Tóm tắt đơn hàng
+                        </h3>
+
+                        <!-- Summary Details -->
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>Tạm tính (@totalItems sản phẩm)</span>
+                                <span>@tongTien.ToString("N0") đ</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>Phí vận chuyển</span>
+                                <span style="color: var(--neon-green);">Miễn phí</span>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="height: 1px; background: var(--color-border); margin: 1rem 0;"></div>
+
+                        <!-- Total -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <span style="font-weight: 600;">Tổng cộng</span>
+                            <div style="text-align: right;">
+                                <div style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 800; color: var(--neon-cyan);">
+                                    @tongTien.ToString("N0") đ
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                    (Đã bao gồm VAT)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checkout Form -->
+                        @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
+                        {
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label class="form-label">Ghi chú đơn hàng</label>
+                                <textarea name="ghiChu" rows="3" class="form-control" placeholder="Ghi chú về đơn hàng, ví dụ: Giao vào buổi sáng..."></textarea>
+                            </div>
+
+                            if (ViewBag.Error != null)
+                            {
+                                <div class="alert-neon alert-danger" style="margin-bottom: 1rem;">
+                                    <i class="bi bi-exclamation-circle"></i>
+                                    @ViewBag.Error
+                                </div>
+                            }
+
+                            <button type="submit" class="btn-neon" style="width: 100%; padding: 1rem; font-size: 1rem;">
+                                <i class="bi bi-credit-card"></i>
+                                <span>Tiến hành thanh toán</span>
+                            </button>
+                        }
+
+                        <!-- Payment Methods -->
+                        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 0.75rem;">
+                                Phương thức thanh toán được chấp nhận
+                            </p>
+                            <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                                <div style="width: 45px; height: 28px; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 600; color: var(--text-muted);">
+                                    VISA
+                                </div>
+                                <div style="width: 45px; height: 28px; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 600; color: var(--text-muted);">
+                                    MC
+                                </div>
+                                <div style="width: 45px; height: 28px; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 600; color: var(--text-muted);">
+                                    COD
+                                </div>
+                                <div style="width: 45px; height: 28px; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 600; color: var(--text-muted);">
+                                    MOMO
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Note -->
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-lg);">
+                        <i class="bi bi-shield-check" style="font-size: 1.25rem; color: var(--neon-green);"></i>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                            <span style="font-weight: 600; color: var(--neon-green);">Thanh toán an toàn</span><br>
+                            Thông tin của bạn được bảo mật 100%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Empty Cart -->
+            <div class="glass-card" style="text-align: center; padding: 4rem 2rem; max-width: 500px; margin: 0 auto;">
+                <div style="width: 100px; height: 100px; margin: 0 auto 1.5rem; background: rgba(0, 245, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-bag" style="font-size: 2.5rem; color: var(--neon-cyan);"></i>
+                </div>
+                <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">
+                    Giỏ hàng trống
+                </h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm tuyệt vời của chúng tôi!
+                </p>
+                <a href="@Url.Action("Index", "Product")" class="btn-neon" style="padding: 1rem 2rem;">
+                    <i class="bi bi-bag-plus"></i>
+                    Bắt đầu mua sắm
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) return;
+
+            // For now, redirect to update - you can implement AJAX later
+            window.location.href = '@Url.Action("UpdateQuantity", "Cart")/' + productId + '?quantity=' + newQuantity;
+        }
+    </script>
+}
+
+@section styles {
+    <style>
+        .cart-item:hover {
+            background: rgba(0, 245, 255, 0.02);
+        }
+
+        @@media (max-width: 1000px) {
+            .neon-container > div[style*="grid-template-columns: 1fr 400px"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            .glass-card > div[style*="display: grid"][style*="grid-template-columns: 2fr"] {
+                display: none !important;
+            }
+
+            .cart-item {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1rem !important;
+            }
+
+            .cart-item > div {
+                text-align: left !important;
+            }
+
+            .cart-item > div:first-child {
+                flex-direction: row !important;
+            }
+        }
+    </style>
+}

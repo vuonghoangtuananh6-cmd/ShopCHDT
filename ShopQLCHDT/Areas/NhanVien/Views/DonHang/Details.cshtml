@@ -1,0 +1,188 @@
+﻿@model ShopQLCHDT.Models.HOADON
+
+@{
+    ViewBag.Title = "Chi tiết Hóa đơn #" + Model.MAHD;
+}
+
+<div class="section pt-4">
+    <div class="neon-container">
+
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h2 class="section-title text-gradient m-0">Chi tiết Đơn hàng #@Model.MAHD</h2>
+                <p class="text-secondary mt-1 mb-0">
+                    <i class="bi bi-clock-history me-1"></i>
+                    Ngày tạo: <span class="text-white">@Model.NGAYBAN.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index")" class="btn-outline-neon">
+                <i class="bi bi-arrow-left me-2"></i> Quay lại
+            </a>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+                <div class="d-flex flex-column gap-4 h-100">
+
+                    <div class="glass-card animate-slide-up">
+                        <h4 class="text-white mb-3 pb-2 border-bottom border-secondary d-flex align-items-center">
+                            <span class="badge-neon me-2"><i class="bi bi-person-vcard"></i></span>
+                            Khách hàng
+                        </h4>
+
+                        @if (Model.KHACHHANG != null)
+                        {
+                            <div class="d-flex flex-column gap-3">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="text-secondary fs-4"><i class="bi bi-person-circle"></i></div>
+                                    <div>
+                                        <span class="text-muted text-xs text-uppercase fw-bold">Họ tên</span>
+                                        <div class="text-white fw-bold">@Model.KHACHHANG.TENKH</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="text-secondary fs-4"><i class="bi bi-telephone"></i></div>
+                                    <div>
+                                        <span class="text-muted text-xs text-uppercase fw-bold">Điện thoại</span>
+                                        <div class="text-neon-cyan font-monospace">@Model.KHACHHANG.DIENTHOAI</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="text-secondary fs-4"><i class="bi bi-geo-alt"></i></div>
+                                    <div>
+                                        <span class="text-muted text-xs text-uppercase fw-bold">Địa chỉ</span>
+                                        <div class="text-white small">@Model.KHACHHANG.DIACHI</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-muted fst-italic">Khách hàng ẩn danh hoặc đã bị xóa.</div>
+                        }
+                    </div>
+
+                    <div class="glass-card animate-slide-up flex-grow-1" style="animation-delay: 0.1s">
+                        <h4 class="text-white mb-3 pb-2 border-bottom border-secondary d-flex align-items-center">
+                            <span class="badge-neon badge-sale me-2"><i class="bi bi-gear-wide-connected"></i></span>
+                            Thông tin xử lý
+                        </h4>
+
+                        <div class="d-flex flex-column gap-3">
+                            <div>
+                                <span class="text-muted text-xs text-uppercase fw-bold">Nhân viên lập đơn</span>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <div class="user-avatar" style="width: 24px; height: 24px; font-size: 10px;">
+                                        <i class="bi bi-person-badge-fill"></i>
+                                    </div>
+                                    <span class="text-white">@(Model.NHANVIEN?.TENNV ?? "N/A")</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="text-muted text-xs text-uppercase fw-bold">Trạng thái hiện tại</span>
+                                <div class="mt-1">
+                                    @if (Model.TRANGTHAI == "Chờ duyệt")
+                                    {
+                                        <span class="badge-neon" style="background: rgba(251, 191, 36, 0.1); color: var(--neon-yellow); border: 1px solid rgba(251, 191, 36, 0.3);">
+                                            <i class="bi bi-hourglass-split me-1"></i> Chờ duyệt
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-neon badge-new">
+                                            <i class="bi bi-check2-all me-1"></i> @Model.TRANGTHAI
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="text-muted text-xs text-uppercase fw-bold">Ghi chú</span>
+                                <div class="p-2 mt-1 rounded text-white small" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--color-border);">
+                                    @(Model.GHICHU ?? "Không có ghi chú")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="glass-card h-100 animate-slide-up" style="animation-delay: 0.2s;">
+                    <h4 class="text-white mb-3 pb-2 border-bottom border-secondary d-flex align-items-center">
+                        <span class="badge-neon badge-new me-2"><i class="bi bi-bag-check"></i></span>
+                        Danh sách sản phẩm
+                    </h4>
+
+                    <div class="table-responsive custom-scrollbar mb-4" style="max-height: 500px;">
+                        <table class="table pos-table align-middle mb-0">
+                            <thead class="sticky-top" style="background: rgba(10,10,15,0.95); backdrop-filter: blur(5px);">
+                                <tr>
+                                    <th class="ps-3" style="width: 15%">Mã SP</th>
+                                    <th style="width: 35%">Sản phẩm</th>
+                                    <th class="text-center" style="width: 15%">SL</th>
+                                    <th class="text-end" style="width: 15%">Đơn giá</th>
+                                    <th class="text-end pe-3" style="width: 20%">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CHITIETHD)
+                                {
+                                    <tr>
+                                        <td class="ps-3 font-monospace text-muted">#@item.MASP</td>
+                                        <td>
+                                            <div class="fw-bold text-white">@(item.SANPHAM?.TENSP ?? "Sản phẩm không tồn tại")</div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge-neon badge-new px-3">x @item.SOLUONG</span>
+                                        </td>
+                                        <td class="text-end text-secondary font-monospace">
+                                            @((item.THANHTIEN ?? 0).ToString("N0"))
+                                        </td>
+                                        <td class="text-end pe-3 fw-bold text-accent font-monospace">
+                                            @((item.SOLUONG * item.THANHTIEN ?? 0).ToString("N0"))
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-auto border-top border-secondary pt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+                            <span class="text-secondary text-uppercase fw-bold letter-spacing-1">Tổng giá trị đơn hàng</span>
+                            <div class="text-end">
+                                <div class="text-gradient fs-1 fw-bold font-display">
+                                    @((Model.TONGTIEN ?? 0).ToString("N0")) <span class="fs-4 text-muted">VNĐ</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.TRANGTHAI == "Chờ duyệt")
+                        {
+                            using (Html.BeginForm("DuyetDon", "DonHang", new { id = Model.MAHD }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-neon w-100 py-3 fs-5 shadow-glow-green text-uppercase fw-bold transition-transform"
+                                        style="--neon-cyan: var(--neon-green); background: linear-gradient(135deg, var(--neon-green), #10b981);">
+                                    <i class="bi bi-check-circle-fill me-2"></i> Xác nhận & Duyệt đơn hàng
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-neon alert-success text-center m-0">
+                                <i class="bi bi-check2-all me-2"></i> Đơn hàng này đã hoàn tất.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,340 @@
+﻿@model ShopQLCHDT.Models.ViewModels.POSViewModel
+
+
+@{
+    ViewBag.Title = "Bán hàng tại quầy (POS)";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutPOS.cshtml"; // <--- THÊM DÒNG NÀY
+}
+
+
+<style>
+
+    body {
+        overflow: hidden;
+    }
+
+    .pos-container {
+        height: calc(100vh - 56px);
+    }
+
+    .pos-left-column {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .search-area {
+        flex-shrink: 0;
+    }
+
+    .product-list-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-top: 15px;
+    }
+
+    .pos-right-column {
+        display: flex;
+        flex-direction: column;
+        height: 85%;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 1px solid #dee2e6;
+        color: black !important; /* Đảm bảo chữ trong cột phải là màu đen */
+    }
+
+        /* Màu chữ trong bảng */
+        .pos-right-column .table th,
+        .pos-right-column .table td {
+            color: black !important; /* Chữ trong bảng phải là màu đen */
+        }
+
+        .pos-right-column .table {
+            background-color: #ffffff !important; /* Nền sáng cho bảng */
+        }
+
+            .pos-right-column .table th {
+                background-color: #f1f1f1 !important; /* Nền sáng cho các tiêu đề bảng */
+            }
+
+        /* Chỉnh sửa input và textarea */
+        .pos-right-column .bill-details input,
+        .pos-right-column .bill-details textarea {
+            background-color: #fff !important; /* Nền sáng cho input và textarea */
+            color: black !important; /* Chữ trong các input và textarea phải là màu đen */
+            border: 1px solid #ccc; /* Viền sáng cho ô nhập */
+        }
+
+        /* Chỉnh sửa nút xóa */
+        .pos-right-column .bill-details .btn-remove-item {
+            background-color: #f8d7da; /* Nền sáng cho nút xóa */
+            color: black !important; /* Chữ trong nút xóa là màu đen */
+            border: 1px solid #f5c6cb; /* Viền cho nút xóa */
+        }
+
+            .pos-right-column .bill-details .btn-remove-item:hover {
+                background-color: #f5c6cb; /* Màu nền khi hover vào nút xóa */
+                color: white !important; /* Đổi màu chữ thành trắng khi hover */
+            }
+
+    .bill-details {
+        flex-grow: 1;
+        overflow-y: auto;
+        max-height: 50%;
+    }
+
+        .bill-details table {
+            width: 100%;
+        }
+
+    .product-item {
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        border: 1px solid #dee2e6;
+    }
+
+        .product-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .bill-table input {
+        width: 60px;
+    }
+
+    .pos-right-column * {
+        color: #343a40;
+    }
+
+    .text-danger {
+        color: #dc3545 !important; /* Đảm bảo các lỗi hiển thị màu đỏ */
+    }
+
+
+</style>
+
+<div class="row g-0 pos-container">
+
+    <div class="col-lg-7 pos-left-column">
+
+        <div class="mb-3 search-area">
+            <input type="text" id="product-search-input" class="form-control" placeholder="Tìm sản phẩm theo tên hoặc mã vạch..." />
+        </div>
+
+        <div class="product-list-container">
+            <div class="row row-cols-1 row-cols-md-3 g-3" id="product-list">
+                @foreach (var sp in Model.DanhSachSanPham)
+                {
+                    <div class="col product-card-col" data-name="@sp.TenSP.ToLower()" data-id="@sp.MaSP">
+                        <div class="card h-100 product-item @(sp.SoLuongTon <= 0 ? "disabled" : "")"
+                             data-id="@sp.MaSP"
+                             data-name="@sp.TenSP"
+                             data-price="@sp.GiaBan"
+                             data-stock="@sp.SoLuongTon">
+
+                            <img src="~/Content/Images/@sp.HinhAnh" class="card-img-top" alt="@sp.TenSP" style="height: 120px; object-fit: cover;">
+                            <div class="card-body p-2 text-center">
+                                <h6 class="card-title fs-sm text-black">@sp.TenSP</h6>
+                                <p class="card-text text-danger fw-bold">@sp.GiaBan.ToString("N0") đ</p>
+                                <small class="text-muted">Kho: @sp.SoLuongTon</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5 pos-right-column">
+
+        <form id="pos-form"
+              action="@Url.Action("KiemTraKhachHang", "BanHang", new { area = "NhanVien" })"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3 flex-shrink-0">
+                <label for="customer-account-input" class="form-label">Tài khoản Khách hàng (SĐT hoặc Tên TK):</label>
+                <input type="text" id="customer-account-input" class="form-control" />
+            </div>
+
+            <div class="bill-details">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Tên SP</th>
+                            <th>SL</th>
+                            <th>Đơn giá</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bill-items-tbody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="mb-3 flex-shrink-0">
+                <label for="order-notes" class="form-label">Ghi chú:</label>
+                <textarea id="order-notes" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div id="hidden-cart-items">
+            </div>
+            <input type="hidden" id="hidden-customer-account" name="customerAccount" />
+            <input type="hidden" id="hidden-notes" name="ghiChu" />
+            <div class="border-top pt-3 flex-shrink-0">
+                <h3 class="d-flex justify-content-between">
+                    <span>TỔNG TIỀN:</span>
+                    <span id="bill-total-amount" class="text-danger">0 đ</span>
+                </h3>
+
+                <button id="btn-submit-order" type="submit" class="btn btn-success w-100 fs-5 mt-2">
+                    KIỂM TRA & THANH TOÁN
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script>
+        let currentBill = [];
+
+        $(document).ready(function () {
+
+            $('#product-search-input').on('keyup', function () {
+                const keyword = $(this).val().toLowerCase().trim();
+
+                $('#product-list .product-card-col').each(function () {
+                    const productName = $(this).data('name');
+
+                    if (productName.includes(keyword)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // --- 1. Xử lý click thêm sản phẩm vào bill (GIỮ NGUYÊN) ---
+            $('#product-list').on('click', '.product-item:not(.disabled)', function () {
+                const productElement = $(this);
+                const maSP = parseInt(productElement.data('id'));
+                const soLuongTon = parseInt(productElement.data('stock'));
+                let existingItem = currentBill.find(item => item.maSP === maSP);
+
+                if (existingItem) {
+                    if (existingItem.soLuong + 1 > soLuongTon) {
+                        // Thay alert bằng console.log hoặc thông báo Toast/Modal
+                        console.error('Số lượng trong giỏ vượt quá tồn kho!');
+                        return;
+                    }
+                    existingItem.soLuong++;
+                } else {
+                    currentBill.push({
+                        maSP: maSP,
+                        tenSP: productElement.data('name'),
+                        soLuong: 1,
+                        donGia: parseFloat(productElement.data('price')),
+                        soLuongTon: soLuongTon
+                    });
+                }
+                renderBill();
+            });
+
+            // --- 2. Xử lý xóa SP khỏi bill (GIỮ NGUYÊN) ---
+            $('#bill-items-tbody').on('click', '.btn-remove-item', function () {
+                const maSP = parseInt($(this).data('id'));
+                currentBill = currentBill.filter(item => item.maSP !== maSP);
+                renderBill();
+            });
+
+            // --- Xử lý thay đổi số lượng trực tiếp trong bảng (CẬP NHẬT) ---
+            $('#bill-items-tbody').on('change', '.bill-item-qty', function () {
+                const maSP = parseInt($(this).data('id'));
+                let newQty = parseInt($(this).val());
+                let item = currentBill.find(i => i.maSP === maSP);
+
+                if (item) {
+                    const maxQty = parseInt($(this).attr('max')); // Lấy số lượng tồn kho
+
+                    if (newQty < 1) {
+                        newQty = 1;
+                        $(this).val(1);
+                    } else if (newQty > maxQty) {
+                        newQty = maxQty;
+                        $(this).val(maxQty);
+                        console.error('Số lượng không thể vượt quá tồn kho!');
+                    }
+                    item.soLuong = newQty;
+                    renderBill();
+                }
+            });
+
+
+            // --- 3. Xử lý Form SUBMIT (Không dùng AJAX) (GIỮ NGUYÊN) ---
+            $('#pos-form').on('submit', function (e) {
+
+                // 1. Kiểm tra giỏ hàng
+                if (currentBill.length === 0) {
+                    console.error('Hóa đơn đang trống!');
+                    e.preventDefault();
+                    return;
+                }
+
+                // 2. Dọn sạch các input ẩn cũ (nếu có)
+                $('#hidden-cart-items').empty();
+
+                // 3. Sao chép dữ liệu từ ô thấy được -> ô ẩn
+                $('#hidden-customer-account').val($('#customer-account-input').val());
+                $('#hidden-notes').val($('#order-notes').val());
+
+                // 4. Tạo các input ẩn cho giỏ hàng
+                currentBill.forEach((item, index) => {
+                    $('#hidden-cart-items').append(
+                        `<input type="hidden" name="ChiTietDonHang[${index}].MaSP" value="${item.maSP}" />`
+                    );
+                    $('#hidden-cart-items').append(
+                        `<input type="hidden" name="ChiTietDonHang[${index}].SoLuong" value="${item.soLuong}" />`
+                    );
+                    // Dùng toFixed(2) để đảm bảo format số thập phân nếu cần
+                    $('#hidden-cart-items').append(
+                        `<input type="hidden" name="ChiTietDonHang[${index}].DonGia" value="${item.donGia.toFixed(2)}" />`
+                    );
+                });
+
+                // 5. Cho phép form submit
+                return true;
+            });
+        });
+
+        // Hàm vẽ lại bảng Bill và Tổng tiền (GIỮ NGUYÊN)
+        function renderBill() {
+            const tbody = $('#bill-items-tbody');
+            tbody.empty();
+
+            let tongTien = 0;
+
+            currentBill.forEach(item => {
+                let thanhTien = item.soLuong * item.donGia;
+                tongTien += thanhTien;
+
+                let row = `<tr>
+                                    <td>${item.tenSP}</td>
+                                    <td><input class="bill-item-qty form-control form-control-sm" type="number" value="${item.soLuong}" data-id="${item.maSP}" min="1" max="${item.soLuongTon}" /></td>
+                                    <td>${item.donGia.toLocaleString('vi-VN')}</td>
+                                    <td><button type="button" class="btn btn-sm btn-outline-danger btn-remove-item" data-id="${item.maSP}">X</button></td>
+                                </tr>`;
+                tbody.append(row);
+            });
+
+            // Cập nhật tổng tiền
+            $('#bill-total-amount').text(tongTien.toLocaleString('vi-VN') + ' đ');
+        }
+
+    </script>
+}

@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Điện Máy SmartHome</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/Content/style.css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
+        <div class="container">
+
+            @Html.ActionLink("Điện Máy SmartHome", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        @Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Sản phẩm", "Index", "SanPham", new { area = "Admin" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Nhân viên", "Index", "NHANVIEN", new { area = "Admin" }, new { @class = "nav-link" })
+                    </li>
+                </ul>
+
+                <!-- SEARCH BOX -->
+                <form class="d-flex search-box me-3 btn-outline" action="@Url.Action("Search", "NHANVIEN", new { area = "Admin" })">
+                    <input class="form-control" type="search" placeholder="Tìm nhân viên theo tên" name="keyword" />
+                    <button class="btn ms-2 btn-outline-primary" type="submit"
+                            style="color:white; border-radius:30px;">
+                        Tìm
+                    </button>
+                </form>
+
+                <ul class="navbar-nav">
+
+                    @if (Session["Username"] != null)
+                    {
+                        // 1. LẤY DỮ LIỆU TỪ SESSION VÀ ÉP KIỂU AN TOÀN
+                        var role = Session["Role"]?.ToString();
+                        var tenHienThi = Session["TenHienThi"] as string ?? Session["Username"].ToString();
+
+                        // Lấy quyền (Nếu null thì mặc định là false)
+                        bool canSell = Session["Quyen_BanHang"] != null && (bool)Session["Quyen_BanHang"];
+                        bool canImport = Session["Quyen_NhapHang"] != null && (bool)Session["Quyen_NhapHang"];
+                        bool canStock = Session["Quyen_TonKho"] != null && (bool)Session["Quyen_TonKho"];
+                        // Quyền nhà cung cấp (thường đi kèm quyền nhập hàng hoặc kho)
+                        bool canManageSupplier = canImport || canStock;
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle fs-4 me-2"></i>
+                                <span>Xin chào, @tenHienThi</span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                                @* === MENU KHÁCH HÀNG === *@
+                                @if (role == "Khách hàng")
+                                {
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Cart", new { area = "" })"><i class="bi bi-receipt"></i> Đơn hàng của tôi</a></li>
+                                }
+
+                                @* === MENU NHÂN VIÊN (ĐÃ PHÂN QUYỀN) === *@
+                                @if (role == "Nhân viên")
+                                {
+                                    // -- NHÓM BÁN HÀNG --
+                                    if (canSell)
+                                    {
+                                        <li><h6 class="dropdown-header">Bán Hàng</h6></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "BanHang", new { area = "NhanVien" })"><i class="bi bi-shop"></i> Bán hàng (POS)</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "DonHang", new { area = "NhanVien" })"><i class="bi bi-file-earmark-text"></i> QL Đơn hàng</a></li>
+                                    }
+
+                                    // Đường kẻ phân cách nếu có cả 2 quyền
+                                    if (canSell && (canImport || canStock))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                    }
+
+                                    // -- NHÓM KHO HÀNG --
+                                    if (canImport || canStock)
+                                    {
+                                        <li><h6 class="dropdown-header">Kho Hàng</h6></li>
+
+                                        if (canImport)
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("Create", "NhapHang", new { area = "Kho" })"><i class="bi bi-box-seam"></i> Tạo phiếu nhập</a></li>
+                                        }
+
+                                        if (canStock)
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("Index", "TonKho", new { area = "Kho" })"><i class="bi bi-boxes"></i> Báo cáo tồn kho</a></li>
+                                        }
+
+                                        if (canManageSupplier)
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("Index", "NhaCungCap", new { area = "Kho" })"><i class="bi bi-truck"></i> QL Nhà cung cấp</a></li>
+                                        }
+                                    }
+                                }
+
+                                @* === MENU ADMIN (TOÀN QUYỀN) === *@
+                                @if (role == "Admin")
+                                {
+                                    <li><h6 class="dropdown-header">Quản trị</h6></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "NhanVien", new { area = "Admin" })"><i class="bi bi-people"></i> QL Nhân viên</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "PhanQuyen", new { area = "Admin" })"><i class="bi bi-shield-lock"></i> Phân quyền</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "SanPham", new { area = "Admin" })"><i class="bi bi-phone"></i> QL Sản Phẩm</a></li>
+
+                                    // Admin cũng cần vào trang bán hàng
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "BanHang", new { area = "NhanVien" })"><i class="bi bi-shop"></i> Vào trang POS</a></li>
+                                }
+
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="@Url.Action("Logout", "Account", new { area = "" })">
+                                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("Register", "Account")" class="nav-link">Đăng ký</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Login", "Account")" class="nav-link">Đăng nhập</a>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container body-content mt-4">
+        @RenderBody()
+
+        <footer class="bg-dark text-light mt-5 pt-4 pb-3">
+            <div class="container">
+                <div class="row">
+                    <!-- Giới thiệu -->
+                    <div class="col-md-4 mb-3">
+                        <h5 class="fw-bold">Cửa hàng điện thoại</h5>
+                        <p>
+                            Mang đến những chiếc điện thoại và thiết bị công nghệ chất lượng cao với giá cả hợp lý.
+                        </p>
+                    </div>
+
+                    <!-- Liên kết nhanh -->
+                    <div class="col-md-4 mb-3">
+                        <h5 class="fw-bold">Liên kết nhanh</h5>
+                        <ul class="list-unstyled">
+                            <li>
+                                @Html.ActionLink("Trang chủ", "Index", "Home", null, new { @class = "nav-link text-light text-decoration-none" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Sản phẩm", "Index", "Product", null, new { @class = "nav-link text-light text-decoration-none" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Giỏ hàng", "Index", "Cart", null, new { @class = "nav-link text-light text-decoration-none" })
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <hr class="border-secondary">
+                <div class="text-center">
+                    <small>&copy; 2025 . All rights reserved.</small>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

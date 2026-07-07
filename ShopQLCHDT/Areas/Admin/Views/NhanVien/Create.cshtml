@@ -1,0 +1,128 @@
+﻿@model ShopQLCHDT.Models.ViewModels.NhanVienCreateViewModel
+
+@{
+    ViewBag.Title = "Thêm mới Nhân viên";
+}
+
+<div class="section pt-5">
+    <div class="neon-container">
+
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h2 class="section-title text-gradient m-0">Thêm Nhân Sự Mới</h2>
+                    <a href="@Url.Action("Index")" class="btn-outline-neon btn-sm border-0 text-secondary">
+                        <i class="bi bi-arrow-left me-2"></i> Quay lại
+                    </a>
+                </div>
+
+                <div class="glass-card animate-slide-up p-5">
+
+                    @using (Html.BeginForm("Create", "NhanVien", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "alert alert-neon alert-danger mb-4" })
+
+                        <div class="row g-5">
+
+                            <div class="col-md-6 border-end border-secondary pe-md-5">
+                                <h5 class="text-white mb-4 d-flex align-items-center">
+                                    <span class="badge-neon me-2" style="background: var(--neon-purple); border-color: var(--neon-purple); color: #fff;"><i class="bi bi-shield-lock"></i></span>
+                                    Thông tin Tài khoản
+                                </h5>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.TenDangNhap, "Tên Đăng Nhập", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                            <i class="bi bi-person-badge"></i>
+                                        </span>
+                                        @Html.EditorFor(model => model.TenDangNhap, new { htmlAttributes = new { @class = "form-control ps-5", placeholder = "VD: nhanvien01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.TenDangNhap, "", new { @class = "text-danger text-xs mt-1" })
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.MatKhau, "Mật Khẩu", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                            <i class="bi bi-key"></i>
+                                        </span>
+                                        @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { @class = "form-control ps-5", type = "password", placeholder = "Nhập mật khẩu..." } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger text-xs mt-1" })
+                                </div>
+
+                                <div class="alert alert-info bg-opacity-10 border-0 text-white small mt-4">
+                                    <i class="bi bi-info-circle me-2"></i> Tài khoản sẽ được kích hoạt ngay sau khi tạo thành công.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 ps-md-5">
+                                <h5 class="text-white mb-4 d-flex align-items-center">
+                                    <span class="badge-neon me-2"><i class="bi bi-person-vcard"></i></span>
+                                    Thông tin Cá nhân
+                                </h5>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.TenNV, "Họ và Tên", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    @Html.EditorFor(model => model.TenNV, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập họ tên nhân viên..." } })
+                                    @Html.ValidationMessageFor(model => model.TenNV, "", new { @class = "text-danger text-xs mt-1" })
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group mb-4">
+                                        <label class="form-label text-xs text-uppercase letter-spacing-1">Giới tính</label>
+                                        <select name="GioiTinh" class="form-control">
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 form-group mb-4">
+                                        @Html.LabelFor(model => model.Luong, "Lương cơ bản", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                        <div class="input-group">
+                                            @Html.EditorFor(model => model.Luong, new { htmlAttributes = new { @class = "form-control text-end font-monospace text-accent", type = "number", placeholder = "0" } })
+                                            <span class="input-group-text bg-dark border-secondary text-muted">đ</span>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.Luong, "", new { @class = "text-danger text-xs mt-1" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.DienThoai, "Số điện thoại", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                            <i class="bi bi-telephone"></i>
+                                        </span>
+                                        @Html.EditorFor(model => model.DienThoai, new { htmlAttributes = new { @class = "form-control ps-5 font-monospace", placeholder = "Nhập số điện thoại..." } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.DienThoai, "", new { @class = "text-danger text-xs mt-1" })
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.DiaChi, "Địa chỉ", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                                            <i class="bi bi-geo-alt"></i>
+                                        </span>
+                                        @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control ps-5", placeholder = "Nhập địa chỉ..." } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 mt-4 border-top border-secondary d-flex justify-content-end gap-3">
+                            <a href="@Url.Action("Index")" class="btn-outline-neon border-0 text-secondary px-4">Hủy bỏ</a>
+                            <button type="submit" class="btn-neon px-5 shadow-glow-cyan" style="background: var(--neon-green);">
+                                <i class="bi bi-person-plus-fill me-2"></i> TẠO NHÂN VIÊN
+                            </button>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

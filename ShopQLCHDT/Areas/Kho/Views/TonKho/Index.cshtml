@@ -1,0 +1,137 @@
+﻿@model IEnumerable<ShopQLCHDT.Models.ViewModels.TonKhoViewModel>
+
+@{
+    ViewBag.Title = "Báo cáo Tồn Kho";
+    // Đếm số lượng sản phẩm sắp hết để hiển thị trên Header
+    int lowStockCount = Model.Count(x => x.SoLuongTon < 5);
+}
+
+<div class="section pt-4">
+    <div class="neon-container">
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-5 gap-3">
+            <div>
+                <h2 class="section-title text-gradient m-0">Báo cáo Tồn Kho</h2>
+                <p class="text-secondary mt-1 mb-0">Theo dõi số lượng hàng hóa trong kho thực tế.</p>
+            </div>
+
+            <div class="d-flex gap-3">
+                <div class="glass-card px-4 py-2 d-flex align-items-center gap-3 animate-fade-in">
+                    <div class="text-secondary fs-3"><i class="bi bi-box-seam"></i></div>
+                    <div>
+                        <div class="text-xs text-uppercase text-muted fw-bold">Tổng SP</div>
+                        <div class="text-white fw-bold fs-5">@Model.Count()</div>
+                    </div>
+                </div>
+
+                @if (lowStockCount > 0)
+                {
+                    <div class="glass-card px-4 py-2 d-flex align-items-center gap-3 animate-fade-in"
+                         style="border-color: rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.05);">
+                        <div class="text-danger fs-3"><i class="bi bi-exclamation-triangle"></i></div>
+                        <div>
+                            <div class="text-xs text-uppercase text-danger fw-bold">Sắp hết</div>
+                            <div class="text-white fw-bold fs-5">@lowStockCount</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="glass-card animate-slide-up p-0 overflow-hidden">
+            <div class="table-responsive custom-scrollbar" style="max-height: 700px;">
+                <table class="table pos-table align-middle mb-0 table-hover-neon">
+                    <thead class="sticky-top" style="background: rgba(10,10,15,0.95); backdrop-filter: blur(5px); z-index: 10;">
+                        <tr>
+                            <th class="ps-4 py-3 text-secondary text-uppercase text-xs letter-spacing-1">Sản phẩm</th>
+                            <th class="py-3 text-secondary text-uppercase text-xs letter-spacing-1">Mã SP</th>
+                            <th class="text-center py-3 text-secondary text-uppercase text-xs letter-spacing-1">Tồn kho</th>
+                            <th class="text-end pe-4 py-3 text-secondary text-uppercase text-xs letter-spacing-1">Cập nhật cuối</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model.OrderBy(i => i.SoLuongTon))
+                            {
+                                bool isLowStock = item.SoLuongTon < 5;
+
+                                <tr class="transition-base">
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="product-card-image rounded-3 border border-secondary"
+                                                     style="width: 50px; height: 50px; padding: 2px; background: #fff;">
+                                                    <img src="~/Content/Images/@item.HinhAnh" alt="@item.TenSP"
+                                                         style="width: 100%; height: 100%; object-fit: contain;">
+                                                </div>
+                                                @if (isLowStock)
+                                                {
+                                                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                                        <span class="visually-hidden">Cảnh báo</span>
+                                                    </span>
+                                                }
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-white mb-1">@item.TenSP</div>
+                                                @if (isLowStock)
+                                                {
+                                                    <span class="badge-neon py-1 px-2" style="font-size: 10px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                                                        SẮP HẾT HÀNG
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="font-monospace text-muted text-sm">#@item.MaSP</span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (isLowStock)
+                                        {
+                                            <div class="d-inline-flex align-items-center justify-content-center"
+                                                 style="width: 40px; height: 40px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.5);">
+                                                <span class="fw-bold text-danger fs-5">@item.SoLuongTon</span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="fw-bold text-neon-cyan fs-5 font-monospace">@item.SoLuongTon</span>
+                                        }
+                                    </td>
+
+                                    <td class="text-end pe-4">
+                                        <div class="text-white text-sm font-monospace">
+                                            @item.NgayCapNhatCuoi.ToString("HH:mm")
+                                        </div>
+                                        <div class="text-muted text-xs">
+                                            @item.NgayCapNhatCuoi.ToString("dd/MM/yyyy")
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="bi bi-box-seam fs-1 d-block mb-2 opacity-50"></i>
+                                    Kho hàng trống.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="px-4 py-3 border-top border-secondary d-flex justify-content-between align-items-center bg-dark bg-opacity-25">
+                <span class="text-secondary text-xs">Dữ liệu được cập nhật theo thời gian thực.</span>
+                <button class="btn-outline-neon btn-sm border-0" onclick="window.print()">
+                    <i class="bi bi-printer me-2"></i> In báo cáo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+﻿@model ShopQLCHDT.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Thêm mới Sản phẩm";
+}
+
+<div class="section pt-5">
+    <div class="neon-container">
+
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h2 class="section-title text-gradient m-0">Thêm Sản Phẩm Mới</h2>
+                    <a href="@Url.Action("Index")" class="btn-outline-neon btn-sm border-0 text-secondary">
+                        <i class="bi bi-arrow-left me-2"></i> Quay lại
+                    </a>
+                </div>
+
+                <div class="glass-card animate-slide-up p-5">
+                    @using (Html.BeginForm("Create", "SanPham", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "alert alert-neon alert-danger mb-4" })
+
+                        <div class="row g-5">
+
+                            <div class="col-md-7">
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.TENSP, "Tên Sản phẩm", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    @Html.EditorFor(model => model.TENSP, new { htmlAttributes = new { @class = "form-control", placeholder = "VD: iPhone 15 Pro Max 256GB..." } })
+                                    @Html.ValidationMessageFor(model => model.TENSP, "", new { @class = "text-danger text-xs mt-1" })
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group mb-4">
+                                        @Html.LabelFor(model => model.GIABAN, "Giá bán", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                        <div class="input-group">
+                                            @Html.EditorFor(model => model.GIABAN, new { htmlAttributes = new { @class = "form-control text-end font-monospace text-accent", type = "number", min = "1000", placeholder = "0" } })
+                                            <span class="input-group-text bg-dark border-secondary text-muted">đ</span>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.GIABAN, "", new { @class = "text-danger text-xs mt-1" })
+                                    </div>
+
+                                    <div class="col-md-6 form-group mb-4">
+                                        @Html.LabelFor(model => model.DVT, "Đơn vị tính", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                        @Html.DropDownListFor(model => model.DVT, new SelectList(new[] { "Cái", "Bộ" }), new { @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.MATH, "Thương hiệu", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    @Html.DropDownList("MATH", null, "--- Chọn Thương hiệu ---", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.MATH, "", new { @class = "text-danger text-xs mt-1" })
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    @Html.LabelFor(model => model.THONGTIN, "Mô tả chi tiết", new { @class = "form-label text-xs text-uppercase letter-spacing-1" })
+                                    @Html.TextAreaFor(model => model.THONGTIN, new { @class = "form-control", rows = 4, placeholder = "Nhập thông tin cấu hình, đặc điểm..." })
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="form-group mb-4">
+                                    <label class="form-label text-xs text-uppercase letter-spacing-1 mb-3">Tải lên Hình ảnh</label>
+
+                                    <div class="text-center p-5 rounded border border-secondary bg-dark bg-opacity-25 mb-3">
+                                        <i class="bi bi-image-fill fs-1 text-muted opacity-50 mb-3 d-block"></i>
+                                        <label for="HinhAnhFile" class="btn-neon text-center cursor-pointer position-relative overflow-hidden">
+                                            <i class="bi bi-cloud-upload me-2"></i> Chọn tệp ảnh
+                                            <input type="file" name="HinhAnhFile" id="HinhAnhFile" class="position-absolute top-0 start-0 opacity-0 w-100 h-100 cursor-pointer" />
+                                        </label>
+                                    </div>
+                                    <div class="text-muted text-xs text-center">Chấp nhận: .jpg, .png, .webp (Tối đa 2MB)</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="pt-4 mt-4 border-top border-secondary d-flex justify-content-end gap-3">
+                            <a href="@Url.Action("Index")" class="btn-outline-neon border-0 text-secondary px-4">Hủy bỏ</a>
+                            <button type="submit" class="btn-neon px-5 shadow-glow-cyan" style="background: var(--neon-green);">
+                                <i class="bi bi-check-circle me-2"></i> TẠO MỚI
+                            </button>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

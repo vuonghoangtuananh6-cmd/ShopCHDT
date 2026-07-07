@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ShopQLCHDT.Models.PHIEUNHAP>
+
+@{
+    ViewBag.Title = "Lịch sử Nhập Hàng";
+}
+
+<h2>Lịch sử Nhập Hàng</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<p>
+    @Html.ActionLink("Tạo Phiếu Nhập Mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Mã PN</th>
+            <th>Ngày Nhập</th>
+            <th>Nhà Cung Cấp</th>
+            <th>Người Nhập</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MAPN</td>
+                <td>@item.NGAYNHAP.Value.ToString("dd/MM/yyyy")</td>
+                <td>@(item.NHACUNGCAP?.TENNCC ?? "N/A")</td>
+                <td>@(item.BOPHANKHO?.TENNQL ?? "N/A")</td>
+                <td>@(item.TIENNHAP?.ToString("N0") ?? "0") đ</td>
+                <td>@item.TRANGTHAI</td>
+                <td>
+                    @Html.ActionLink("Xem Chi tiết", "Details", new { id = item.MAPN }, new { @class = "btn btn-sm btn-secondary" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

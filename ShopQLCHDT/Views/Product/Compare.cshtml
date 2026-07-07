@@ -1,0 +1,27 @@
+﻿@using ShopQLCHDT.Models
+@{
+    ViewBag.Title = "So Sánh Sản Phẩm";
+    var sp1 = (SANPHAM)ViewBag.Product1;
+    var sp2 = (SANPHAM)ViewBag.Product2;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-5 text-center text-primary">So Sánh: @sp1.TENSP và @sp2.TENSP</h2>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            @Html.Partial("_Sosanh", sp1)
+        </div>
+
+        <div class="col-md-6">
+            @Html.Partial("_Sosanh", sp2)
+        </div>
+
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="@Url.Action("Index", "Product")" class="btn btn-secondary btn-lg">Quay lại danh sách</a>
+    </div>
+
+</div>
